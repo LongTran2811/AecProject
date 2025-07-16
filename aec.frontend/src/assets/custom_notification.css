@@ -1,0 +1,89 @@
+/* --- SUCCESS --- */
+.custom-success-notification {
+    background-color: rgba(22, 163, 74, 0.08);
+    /* xanh lá nhạt */
+    color: #14532d;
+    border: 1px solid #16a34a;
+    backdrop-filter: blur(8px);
+}
+
+.custom-success-notification .el-notification__title {
+    color: #14532d;
+    font-weight: bold;
+}
+
+.custom-success-notification .el-icon {
+    color: #16a34a;
+}
+
+/* --- WARNING --- */
+.custom-warning-notification {
+    background-color: rgba(251, 191, 36, 0.12);
+    /* vàng nhạt */
+    color: #78350f;
+    border: 1px solid #facc15;
+    backdrop-filter: blur(8px);
+}
+
+.custom-warning-notification .el-notification__title {
+    color: #78350f;
+    font-weight: bold;
+}
+
+.custom-warning-notification .el-icon {
+    color: #facc15;
+}
+
+/* --- DANGER (ERROR) --- */
+.custom-danger-notification {
+    background-color: rgba(239, 68, 68, 0.12);
+    /* đỏ nhạt */
+    color: #7f1d1d;
+    border: 1px solid #ef4444;
+    backdrop-filter: blur(8px);
+}
+
+.custom-danger-notification .el-notification__title {
+    color: #7f1d1d;
+    font-weight: bold;
+}
+
+.custom-danger-notification .el-icon {
+    color: #ef4444;
+}
+
+/* --- PRIMARY --- */
+.custom-primary-notification {
+    background-color: rgba(59, 130, 246, 0.10);
+    /* xanh dương nhạt */
+    color: #1e3a8a;
+    border: 1px solid #3b82f6;
+    backdrop-filter: blur(8px);
+}
+
+.custom-primary-notification .el-notification__title {
+    color: #1e3a8a;
+    font-weight: bold;
+}
+
+.custom-primary-notification .el-icon {
+    color: #3b82f6;
+}
+
+/* --- SECONDARY (Xám nhạt) --- */
+.custom-secondary-notification {
+    background-color: rgba(107, 114, 128, 0.08);
+    /* xám nhạt */
+    color: #374151;
+    border: 1px solid #9ca3af;
+    backdrop-filter: blur(8px);
+}
+
+.custom-secondary-notification .el-notification__title {
+    color: #374151;
+    font-weight: bold;
+}
+
+.custom-secondary-notification .el-icon {
+    color: #6b7280;
+}
