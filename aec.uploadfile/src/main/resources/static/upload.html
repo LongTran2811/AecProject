@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Ảnh - Backend Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #fff;
+            margin-top: 40px;
+            padding: 36px 28px 28px 28px;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10);
+            max-width: 420px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            animation: fadeIn 0.7s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2d3a4b;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .desc {
+            color: #6b7280;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #a5b4fc;
+            border-radius: 12px;
+            background: #f9fafb;
+            padding: 16px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .upload-label:hover {
+            border: 2px solid #6366f1;
+            background: #eef2ff;
+        }
+
+        .upload-label i {
+            font-size: 2.5rem;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .upload-label span {
+            color: #6366f1;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .preview img {
+            max-width: 220px;
+            max-height: 220px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+            border: 1.5px solid #e0e7ef;
+            background: #fff;
+            transition: box-shadow 0.2s;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 8px;
+        }
+
+        .btn:disabled {
+            background: #a5b4fc;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 18px;
+            padding: 16px 10px 10px 10px;
+            border-radius: 12px;
+            background: #e0f2fe;
+            color: #0369a1;
+            word-break: break-all;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+            text-align: center;
+            animation: fadeIn 0.7s;
+        }
+
+        .result img {
+            margin-top: 10px;
+            max-width: 120px;
+            border-radius: 8px;
+            border: 1px solid #bae6fd;
+            background: #fff;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1.5px solid #fecaca;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            color: #6366f1;
+            font-weight: 500;
+        }
+
+        .loading i {
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin-top: 10px;
+                padding: 14px 2px 14px 2px;
+            }
+
+            .preview img {
+                max-width: 100%;
+                max-height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2><i class="fa-solid fa-image"></i> Upload Ảnh</h2>
+        <div class="desc">Chọn ảnh từ thiết bị để upload lên server. Sau khi upload sẽ nhận được link ảnh gốc và
+            thumbnail.</div>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label class="upload-label" for="fileInput">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Chọn hoặc kéo thả ảnh vào đây</span>
+                <input type="file" name="file" id="fileInput" accept="image/*" required />
+            </label>
+            <div class="preview" id="preview"></div>
+            <button type="submit" class="btn" id="uploadBtn" disabled><i class="fa-solid fa-upload"></i> Tải ảnh lên</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const resultDiv = document.getElementById('result');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadLabel = document.querySelector('.upload-label');
+
+        // Drag & drop
+        uploadLabel.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.style.border = '2px solid #6366f1';
+            this.style.background = '#eef2ff';
+        });
+        uploadLabel.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            this.style.border = '2px dashed #a5b4fc';
+            this.style.background = '#f9fafb';
+        });
+        uploadLabel.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.style.border = '2px dashed #a5b4fc';
+            this.style.background = '#f9fafb';
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                fileInput.files = e.dataTransfer.files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        fileInput.addEventListener('change', function () {
+            preview.innerHTML = '';
+            resultDiv.innerHTML = '';
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                if (!file.type.startsWith('image/')) {
+                    preview.innerHTML = '<span class="error">Vui lòng chọn file ảnh!</span>';
+                    uploadBtn.disabled = true;
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
+                };
+                reader.readAsDataURL(file);
+                uploadBtn.disabled = false;
+            } else {
+                uploadBtn.disabled = true;
+            }
+        });
+
+        uploadForm.onsubmit = async function (e) {
+            e.preventDefault();
+            resultDiv.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner"></i> Đang tải ảnh...</div>';
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fa-solid fa-spinner"></i> Đang tải...';
+            const formData = new FormData(this);
+            try {
+                const response = await fetch('/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(errText);
+                }
+                const result = await response.json();
+                resultDiv.innerHTML = `
+          <div class="result">
+            <b><i class='fa-solid fa-link'></i> Ảnh gốc:</b><br>
+            <a href="${result.imageUrl}" target="_blank">${result.imageUrl}</a><br>
+            <img src="${result.imageUrl}" alt="Ảnh gốc" />
+            <br><b><i class='fa-solid fa-image'></i> Thumbnail:</b><br>
+            <a href="${result.thumbnailUrl}" target="_blank">${result.thumbnailUrl}</a><br>
+            <img src="${result.thumbnailUrl}" alt="Thumbnail" />
+          </div>
+        `;
+            } catch (err) {
+                resultDiv.innerHTML = `<div class="result error"><i class='fa-solid fa-triangle-exclamation'></i> Lỗi: ${err.message}</div>`;
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Tải ảnh lên';
+            }
+        };
+    </script>
+</body>
+
+</html>
