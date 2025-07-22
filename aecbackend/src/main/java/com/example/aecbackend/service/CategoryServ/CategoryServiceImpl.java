@@ -1,12 +1,12 @@
-package com.example.aecbackend.service;
+package com.example.aecbackend.service.CategoryServ;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.aecbackend.dto.CategoryRequestDTO;
-import com.example.aecbackend.dto.CategoryResponseDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryRequestDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryResponseDTO;
 import com.example.aecbackend.entity.Category;
 import com.example.aecbackend.mapper.CategoryMapper;
 import com.example.aecbackend.repository.CategoryRepository;
@@ -48,8 +48,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục có ID: " + id));
         mapper.updateEntityFromDTO(dto, category);
-        category.setUpdateAt(LocalDateTime.now());
-        category.setUpdateBy(updatedBy);
+        category.setUpdatedAt(LocalDateTime.now());
+        category.setUpdatedBy(updatedBy);
         return mapper.toResponseDTO(repository.save(category));
     }
 
@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục có ID: " + id));
         category.setDeletedAt(LocalDateTime.now());
-        category.setDeleteBy(deletedBy);
+        category.setDeletedBy(deletedBy);
         repository.save(category); // Soft delete
     }
 }

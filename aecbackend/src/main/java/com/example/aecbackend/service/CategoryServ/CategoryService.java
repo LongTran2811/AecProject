@@ -1,9 +1,9 @@
-package com.example.aecbackend.service;
+package com.example.aecbackend.service.CategoryServ;
 
 import java.util.List;
 
-import com.example.aecbackend.dto.CategoryRequestDTO;
-import com.example.aecbackend.dto.CategoryResponseDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryRequestDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryResponseDTO;
 
 public interface CategoryService {
     List<CategoryResponseDTO> getAll();

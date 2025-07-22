@@ -1,4 +1,4 @@
-package com.example.aecbackend.dto;
+package com.example.aecbackend.dto.CategoryDTO;
 
 import java.time.LocalDateTime;
 

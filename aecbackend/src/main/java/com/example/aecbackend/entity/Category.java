@@ -1,13 +1,12 @@
 package com.example.aecbackend.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="category")
@@ -95,19 +94,19 @@ public class Category {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getUpdateAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdateAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getUpdateBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdateBy(String updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -119,11 +118,11 @@ public class Category {
         this.deletedAt = deletedAt;
     }
 
-    public String getDeleteBy() {
+    public String getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeleteBy(String deletedBy) {
+    public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.aecbackend.mapper;
 
-import com.example.aecbackend.dto.CategoryRequestDTO;
-import com.example.aecbackend.dto.CategoryResponseDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryRequestDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryResponseDTO;
 import com.example.aecbackend.entity.Category;
 import org.mapstruct.*;
 

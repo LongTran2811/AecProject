@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.aecbackend.dto.CategoryRequestDTO;
-import com.example.aecbackend.dto.CategoryResponseDTO;
-import com.example.aecbackend.service.CategoryService;
+import com.example.aecbackend.dto.CategoryDTO.CategoryRequestDTO;
+import com.example.aecbackend.dto.CategoryDTO.CategoryResponseDTO;
+import com.example.aecbackend.service.CategoryServ.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
