@@ -101,7 +101,8 @@ const openForm = () => {
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="Tác vụ" min-width="10">
-            <el-popover placement="bottom-start" trigger="click">
+            <template #default="scope">
+              <el-popover placement="bottom-start" trigger="click">
                 <div class="flex flex-col items-start space-y-2">
                   <el-button
                     class="w-full !m-0 !justify-start"
@@ -124,6 +125,7 @@ const openForm = () => {
                   </el-button>
                 </template>
               </el-popover>
+            </template>
           </el-table-column>
         </el-table>
       </div>
