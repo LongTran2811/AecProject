@@ -29,8 +29,8 @@ public class Product {
 
     @Column(name = "priceOriginal")
     private Integer priceOriginal;
-    @Column(name = "priceOffcial")
-    private Integer priceOffcial;
+    @Column(name = "priceOfficial")
+    private Integer priceOfficial;
     @Column(name = "priceType", nullable = false, length = 20)
     private String priceType;
     private Integer status;
@@ -46,13 +46,13 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category categoryId;
 
-    public Product( Integer id, String title, String detail, String image, Integer priceOriginal, Integer priceOffcial, String priceType, Integer status, Integer priorityLevel, LocalDateTime createdAt, String createdBy, LocalDateTime updatedAt, String updatedBy, LocalDateTime deletedAt, String deletedBy, Category categoryId) {
+    public Product( Integer id, String title, String detail, String image, Integer priceOriginal, Integer priceOfficial, String priceType, Integer status, Integer priorityLevel, LocalDateTime createdAt, String createdBy, LocalDateTime updatedAt, String updatedBy, LocalDateTime deletedAt, String deletedBy, Category categoryId) {
         this.id = id;
         this.title = title;
         this.detail = detail;
         this.image = image;
         this.priceOriginal = priceOriginal;
-        this.priceOffcial = priceOffcial;
+        this.priceOfficial = priceOfficial;
         this.priceType = priceType;
         this.status = status;
         this.priorityLevel = priorityLevel;
@@ -64,12 +64,12 @@ public class Product {
         this.deletedBy = deletedBy;
         this.categoryId = categoryId;
     }
-    public Product( String title, String detail, String image, Integer priceOriginal, Integer priceOffcial, String priceType, Integer status, Integer priorityLevel, LocalDateTime createdAt, String createdBy, LocalDateTime updatedAt, String updatedBy, LocalDateTime deletedAt, String deletedBy, Category categoryId) {
+    public Product( String title, String detail, String image, Integer priceOriginal, Integer priceOfficial, String priceType, Integer status, Integer priorityLevel, LocalDateTime createdAt, String createdBy, LocalDateTime updatedAt, String updatedBy, LocalDateTime deletedAt, String deletedBy, Category categoryId) {
         this.title = title;
         this.detail = detail;
         this.image = image;
         this.priceOriginal = priceOriginal;
-        this.priceOffcial = priceOffcial;
+        this.priceOfficial = priceOfficial;
         this.priceType = priceType;
         this.status = status;
         this.priorityLevel = priorityLevel;
@@ -113,11 +113,11 @@ public class Product {
     public void setPriceOriginal(Integer priceOriginal) {
         this.priceOriginal = priceOriginal;
     }
-    public Integer getPriceOffcial() {
-        return priceOffcial;
+    public Integer getPriceOfficial() {
+        return priceOfficial;
     }
-    public void setPriceOffcial(Integer priceOffcial) {
-        this.priceOffcial = priceOffcial;
+    public void setPriceOfficial(Integer priceOfficial) {
+        this.priceOfficial = priceOfficial;
     }
     public String getPriceType() {
         return priceType;

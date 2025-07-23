@@ -8,7 +8,7 @@ public class ProductResponseDTO {
     private String detail;
     private String image;
     private Integer priceOriginal;
-    private Integer priceOffcial;
+    private Integer priceOfficial;
     private String priceType;
     private Integer status;
     private Integer priorityLevel;
@@ -31,7 +31,7 @@ public class ProductResponseDTO {
     }
 
     public String getTitle() {
-        return title;
+        return title == null || title.trim().isEmpty() ? "unknown" : title;
     }
 
     public void setTitle(String title) {
@@ -39,7 +39,7 @@ public class ProductResponseDTO {
     }
 
     public String getDetail() {
-        return detail;
+        return detail == null || detail.trim().isEmpty() ? "unknown" : detail;
     }
 
     public void setDetail(String detail) {
@@ -47,7 +47,7 @@ public class ProductResponseDTO {
     }
 
     public String getImage() {
-        return image;
+        return image == null || image.trim().isEmpty() ? "unknown" : image;
     }
 
     public void setImage(String image) {
@@ -62,16 +62,16 @@ public class ProductResponseDTO {
         this.priceOriginal = priceOriginal;
     }
 
-    public Integer getPriceOffcial() {
-        return priceOffcial;
+    public Integer getPriceOfficial() {
+        return priceOfficial;
     }
 
-    public void setPriceOffcial(Integer priceOffcial) {
-        this.priceOffcial = priceOffcial;
+    public void setPriceOfficial(Integer priceOfficial) {
+        this.priceOfficial = priceOfficial;
     }
 
     public String getPriceType() {
-        return priceType;
+        return priceType == null || priceType.trim().isEmpty() ? "unknown" : priceType;
     }
 
     public void setPriceType(String priceType) {
@@ -103,7 +103,7 @@ public class ProductResponseDTO {
     }
 
     public String getCreatedBy() {
-        return createdBy == null ? "" : createdBy;
+        return createdBy == null || createdBy.trim().isEmpty() ? "unknown" : createdBy;
     }
 
     public void setCreatedBy(String createdBy) {
@@ -117,7 +117,7 @@ public class ProductResponseDTO {
         this.updatedAt = updatedAt;
     }
     public String getUpdatedBy() {
-        return updatedBy == null ? "" : updatedBy;
+        return updatedBy == null || updatedBy.trim().isEmpty() ? "unknown" : updatedBy;
     }
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy == null ? "" : updatedBy.trim();
@@ -129,7 +129,7 @@ public class ProductResponseDTO {
         this.deletedAt = deletedAt;
     }
     public String getDeletedBy() {
-        return deletedBy == null ? "" : deletedBy;
+        return deletedBy == null || deletedBy.trim().isEmpty() ? "unknown" : deletedBy;
     }
     public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy == null ? "" : deletedBy.trim();
@@ -140,7 +140,9 @@ public class ProductResponseDTO {
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
-    public String getCategoryTitle() { return categoryTitle; }
+    public String getCategoryTitle() {
+        return categoryTitle == null || categoryTitle.trim().isEmpty() ? "unknown" : categoryTitle;
+    }
     public void setCategoryTitle(String categoryTitle) { this.categoryTitle = categoryTitle; }
 
 }

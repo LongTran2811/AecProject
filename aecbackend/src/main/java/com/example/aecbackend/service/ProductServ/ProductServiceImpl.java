@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDetail(dto.getDetail());
         product.setImage(dto.getImage());
         product.setPriceOriginal(dto.getPriceOriginal());
-        product.setPriceOffcial(dto.getPriceOffcial());
+        product.setPriceOfficial(dto.getPriceOfficial());
         product.setPriceType(dto.getPriceType());
         product.setStatus(dto.getStatus());
         product.setPriorityLevel(dto.getPriorityLevel());
@@ -61,6 +61,7 @@ public class ProductServiceImpl implements ProductService {
         @Override
     public List<ProductResponseDTO> getAll() {
         return productRepo.findAll().stream()
+                .filter(product -> product.getDeletedAt() == null)
                 .map(productMapper::toDTO)
                 .toList();
     }

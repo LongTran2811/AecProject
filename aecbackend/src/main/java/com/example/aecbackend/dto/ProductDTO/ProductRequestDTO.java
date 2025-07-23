@@ -6,7 +6,7 @@ public class ProductRequestDTO {
     private String detail;
     private String image;
     private Integer priceOriginal;
-    private Integer priceOffcial;
+    private Integer priceOfficial;
     private String priceType;
     private Integer status;
     private Integer priorityLevel;
@@ -45,12 +45,12 @@ public class ProductRequestDTO {
         this.priceOriginal = priceOriginal;
     }
 
-    public Integer getPriceOffcial() {
-        return priceOffcial;
+    public Integer getPriceOfficial() {
+        return priceOfficial;
     }
 
-    public void setPriceOffcial(Integer priceOffcial) {
-        this.priceOffcial = priceOffcial;
+    public void setPriceOfficial(Integer priceOfficial) {
+        this.priceOfficial = priceOfficial;
     }
 
     public String getPriceType() {
