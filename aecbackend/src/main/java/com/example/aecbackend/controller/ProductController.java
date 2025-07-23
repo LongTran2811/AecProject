@@ -48,7 +48,7 @@ public class ProductController {
     @PostMapping
     @Operation(summary = "Tạo mới sản phẩm")
     public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO dto) {
-        return ResponseEntity.ok(productService.create(dto, "admin")); // "admin" nên lấy từ JWT
+        return ResponseEntity.ok(productService.create(dto, "unknown")); // "admin" nên lấy từ JWT
     }
 
     @PutMapping("/{id}")

@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDTO> getAll() {
         List<Category> categories = repository.findAll();
-        return mapper.toResponseDTOs(categories);
+        return mapper.toResponseDTOs(categories.stream().filter(c -> c.getDeletedAt() == null).toList());
     }
 
     @Override

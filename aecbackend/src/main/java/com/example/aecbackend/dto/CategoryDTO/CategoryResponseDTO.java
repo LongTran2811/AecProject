@@ -1,8 +1,7 @@
 package com.example.aecbackend.dto.CategoryDTO;
 
-import java.time.LocalDateTime;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.Data;
 @Data
 public class CategoryResponseDTO {
@@ -24,15 +23,19 @@ public class CategoryResponseDTO {
     private LocalDateTime deletedAt;
     private String deletedBy;
 
+    public String getTitle() {
+        return title == null || title.trim().isEmpty() ? "unknown" : title;
+    }
+    public String getImage() {
+        return image == null || image.trim().isEmpty() ? "unknown" : image;
+    }
     public String getCreatedBy() {
-        return createdBy == null ? "" : createdBy;
+        return createdBy == null || createdBy.trim().isEmpty() ? "unknown" : createdBy;
     }
-
     public String getUpdatedBy() {
-        return updatedBy == null ? "" : updatedBy;
+        return updatedBy == null || updatedBy.trim().isEmpty() ? "unknown" : updatedBy;
     }
-
     public String getDeletedBy() {
-        return deletedBy == null ? "" : deletedBy;
+        return deletedBy == null || deletedBy.trim().isEmpty() ? "unknown" : deletedBy;
     }
 }
