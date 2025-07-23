@@ -7,6 +7,10 @@
     label-width="auto"
     class="demo-ruleForm w-full px-6 !space-y-6"
   >
+  <div class="my-4 flex justify-between items-center">
+    <h3>Quản lý danh mục sản phẩm</h3>
+    <el-button type="primary" @click="router.back()" plain>Quay lại</el-button>
+  </div>
     <el-form-item label="Password" prop="pass">
       <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
     </el-form-item>

@@ -18,7 +18,7 @@
         <i class="fa-solid fa-shop ml-0.5"></i>
         <span class="ml-2">Sản phẩm</span>
       </template>
-      <RouterLink to="/admin/manager">
+      <RouterLink to="/admin/category">
         <el-menu-item index="2-1">
           <template #title>
             <i class="fa-solid fa-list"></i>

@@ -1,25 +1,22 @@
 <script lang="ts" setup>
-import { ref, unref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Search, CirclePlus, Delete, MoreFilled, Edit } from '@element-plus/icons-vue'
 import { ElNotification, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category'
 import { storeToRefs } from 'pinia'
+import Create from './FormDialog.vue'
 
-const router = useRouter()
+// const router = useRouter()
 const input2 = ref('')
 const categoryStore = useCategoryStore()
 const { categories, isLoading } = storeToRefs(categoryStore)
 const { getList } = categoryStore
-
+//
 onMounted(() => {
   getList()
 })
 
-const handleEdit = (row) => {
-  console.log('Sửa:', row)
-  // Thực hiện logic sửa ở đây
-}
 const svg = `
         <path class="path" d="
           M 30 15
@@ -31,11 +28,9 @@ const svg = `
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
 
-const emit = defineEmits<{
-  (e: 'show-alert', payload: { type: string; title: string; description: string }): void
-}>()
+// const emit = defineEmits(['show-alert'])
 
-const handleDelete = (row) => {
+const remove = (row) => {
   ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
     confirmButtonText: 'Có',
     cancelButtonText: 'Quay lại',
@@ -63,23 +58,23 @@ const handleDelete = (row) => {
     })
 }
 
-//Popover
-const buttonRef = ref()
-const popoverRef = ref()
-const onClickOutside = () => {
-  unref(popoverRef).popperRef?.delayHide?.()
-}
 
 // Handle Create
-const openForm = () => {
-  router.push('/admin/form')
+const formDialogRef = ref()
+const openForm = async (row) => {
+  if (row && row.id) {
+    await categoryStore.getById(row.id)
+  } else {
+    categoryStore.resetForm()
+  }
+  formDialogRef.value?.openDialog()
 }
 </script>
 
 <template>
   <div class="w-full text-left font-bold text-xl">
-      <h3>Danh mục sản phẩm</h3>
-    </div>
+    <h3>Danh mục sản phẩm</h3>
+  </div>
   <div class="w-full">
     <el-card class="">
       <div class="w-full justify-between items-center flex mb-4 px-2">
@@ -117,7 +112,7 @@ const openForm = () => {
           <el-table-column prop="title" label="Tên danh mục" />
           <el-table-column label="Hình ảnh">
             <template #default="scope">
-              <img :src="scope.row.image" alt="Ảnh" class="w-16 h-16 object-cover rounded border" />
+              <img :src="scope.row.image + '/thumb'" alt="Ảnh" class="w-16 h-16 object-cover rounded border" />
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="Tác vụ" min-width="10">
@@ -127,14 +122,14 @@ const openForm = () => {
                   <el-button
                     class="w-full !m-0 !justify-start"
                     text
-                    @click="handleEdit(scope.row)"
+                    @click="openForm(scope.row)"
                     :icon="Edit"
                     >Sửa</el-button
                   >
                   <el-button
                     class="w-full !m-0 !justify-start"
                     text
-                    @click="handleDelete(scope.row)"
+                    @click="remove(scope.row)"
                     :icon="Delete"
                     >Xoá</el-button
                   >
@@ -151,8 +146,9 @@ const openForm = () => {
       </div>
     </el-card>
   </div>
+  <Create ref="formDialogRef" />
 </template>
 
 <style>
-@import url('../../assets/custom_notification.css');
+@import url('@/assets/custom_notification.css');
 </style>

@@ -14,6 +14,7 @@ import AdminLoginView from '../views/admin/LoginView.vue'
 import AdminDashbroadView from '../views/admin/DashbroadView.vue'
 import AdminRegisterView from '../views/admin/RegisterView.vue'
 import AdminManagerView from '../views/admin/ManagerView.vue'
+import CategoryView from '../views/admin/category/Index.vue'
 import AdminFormView from '../views/admin/FormView.vue'
 
 
@@ -43,6 +44,7 @@ const router = createRouter({
       children: [
         { path: 'dashbroad', name: 'admin-dashbroad', component: AdminDashbroadView },
         { path: 'manager', name: 'admin-manager', component: AdminManagerView },
+        { path: 'category', name: 'admin-category', component: CategoryView },
         { path: 'form', name: 'admin-form', component: AdminFormView }
       ]
     },
