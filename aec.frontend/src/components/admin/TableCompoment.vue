@@ -1,39 +1,20 @@
 <script lang="ts" setup>
-import { ref, unref, reactive } from 'vue'
+import { ref, unref, reactive, onMounted } from 'vue'
 import { Search, CirclePlus, Delete, MoreFilled, Edit } from '@element-plus/icons-vue'
 import { ElNotification, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useCategoryStore } from '@/stores/category'
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
 const input2 = ref('')
+const categoryStore = useCategoryStore()
+const { categories, isLoading } = storeToRefs(categoryStore)
+const { getList } = categoryStore
 
-interface User {
-  date: string
-  name: string
-  address: string
-}
-const tableData: User[] = [
-  {
-    date: '2016-05-04',
-    name: 'Aleyna Kutzner',
-    address: 'Lohrbergstr. 86c, Süd Lilli, Saarland',
-  },
-  {
-    date: '2016-05-03',
-    name: 'Helen Jacobi',
-    address: '760 A Street, South Frankfield, Illinois',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Brandon Deckert',
-    address: 'Arnold-Ohletz-Str. 41a, Alt Malinascheid, Thüringen',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Margie Smith',
-    address: '23618 Windsor Drive, West Ricardoview, Idaho',
-  },
-]
+onMounted(() => {
+  getList()
+})
 
 const handleEdit = (row) => {
   console.log('Sửa:', row)
@@ -110,22 +91,17 @@ const openForm = () => {
         </div>
       </div>
       <div>
-        <el-table :data="tableData" style="min-width: 100%">
+        <el-table :data="categories" style="min-width: 100%">
           <el-table-column type="selection" width="55" />
-          <el-table-column label="Date" width="120">
-            <template #default="scope">{{ scope.row.date }}</template>
-          </el-table-column>
-          <el-table-column property="name" label="Name" width="120" />
-          <el-table-column
-            property="address"
-            label="use show-overflow-tooltip"
-            width="240"
-            show-overflow-tooltip
-          />
-          <el-table-column property="address" label="address" />
-          <el-table-column fixed="right" label="Tác vụ" min-width="10">
+          <el-table-column prop="id" label="ID" width="80" />
+          <el-table-column prop="title" label="Tên danh mục" />
+          <el-table-column label="Hình ảnh">
             <template #default="scope">
-              <el-popover placement="bottom-start" trigger="click">
+              <img :src="scope.row.image" alt="Ảnh" class="w-16 h-16 object-cover rounded border" />
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="Tác vụ" min-width="10">
+            <el-popover placement="bottom-start" trigger="click">
                 <div class="flex flex-col items-start space-y-2">
                   <el-button
                     class="w-full !m-0 !justify-start"
@@ -148,7 +124,6 @@ const openForm = () => {
                   </el-button>
                 </template>
               </el-popover>
-            </template>
           </el-table-column>
         </el-table>
       </div>
