@@ -36,26 +36,26 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("getId/{id}")
     @Operation(summary = "Lấy danh mục theo ID")
     public ResponseEntity<CategoryResponseDTO> getById(@PathVariable int id) {
         return ResponseEntity.ok(categoryService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("create")
     @Operation(summary = "Tạo mới danh mục")
     public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryRequestDTO dto) {
         return ResponseEntity.ok(categoryService.create(dto, "admin")); // "admin" nên lấy từ JWT
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     @Operation(summary = "Cập nhật danh mục")
     public ResponseEntity<CategoryResponseDTO> update(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
         if (updatedBy == null) updatedBy = "unknown";
         return ResponseEntity.ok(categoryService.update(id, dto, updatedBy));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @Operation(summary = "Xóa mềm danh mục")
     public ResponseEntity<Void> delete(@PathVariable int id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";

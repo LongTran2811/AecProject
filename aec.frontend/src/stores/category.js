@@ -29,7 +29,7 @@ export const useCategoryStore = defineStore('category', () => {
 
   function getById(id) {
     isLoading.value = true;
-    api.get(`/categories/${id}`)
+    api.get(`/categories/getId/${id}`)
       .then((response) => {
         category.value = response.data;
         isLoading.value = false;
@@ -45,7 +45,7 @@ export const useCategoryStore = defineStore('category', () => {
   async function create(payload) {
     resetForm();
     isLoading.value = true;
-    await api.post('/categories', payload)
+    await api.post('/categories/create', payload)
       .then(() => {
         category.value = initModel();
         ElNotification({
@@ -74,7 +74,7 @@ export const useCategoryStore = defineStore('category', () => {
 
   async function update(payload) {
     isLoading.value = true;
-    await api.put(`/categories/${payload.id}`, payload)
+    await api.put(`/categories/update/${payload.id}`, payload)
       .then(() => {
         category.value = initModel();
         ElNotification({
@@ -100,7 +100,34 @@ export const useCategoryStore = defineStore('category', () => {
         console.error("Error: ", err);
       });
   }
-
+  async function remove(id) {
+    isLoading.value = true;
+    await api.delete(`/categories/delete/${id}`)
+      .then(() => {
+        category.value = initModel();
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Đã xoá thành công',
+          type: 'success',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-success-notification',
+        });
+        isLoading.value = false;
+      })
+      .catch((err) => {
+        isLoading.value = true;
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Lỗi: ' + err,
+          type: 'danger',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-danger-notification',
+        });
+        console.error("Error: ", err);
+      });
+  }
   return {
     categories,
     category,
@@ -110,6 +137,7 @@ export const useCategoryStore = defineStore('category', () => {
     getById,
     resetForm,
     create,
-    update
+    update,
+    remove
   }
 })

@@ -10,7 +10,7 @@ const categoryStore = useCategoryStore()
 const { category } = storeToRefs(categoryStore)
 const centerDialogVisible = ref(false)
 const title = computed(() => {
-  return category.value.id ? 'Cập nhật danh mục' + category.value.id : 'Thêm mới danh mục'
+  return category.value.id ? 'Cập nhật danh mục ' + category.value.id : 'Thêm mới danh mục'
 })
 
 const rules = {

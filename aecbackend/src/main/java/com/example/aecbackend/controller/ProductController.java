@@ -39,26 +39,26 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("getId/{id}")
     @Operation(summary = "Lấy sản phẩm theo ID")
     public ResponseEntity<Object> getById(@PathVariable int id) {
         return ResponseEntity.ok(productService.getById(id));
     }
 
-    @PostMapping
+    @PostMapping("create")
     @Operation(summary = "Tạo mới sản phẩm")
     public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO dto) {
         return ResponseEntity.ok(productService.create(dto, "unknown")); // "admin" nên lấy từ JWT
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     @Operation(summary = "Cập nhật sản phẩm")
     public ResponseEntity<ProductResponseDTO> update(@PathVariable int id, @Valid @RequestBody ProductRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
         if (updatedBy == null) updatedBy = "unknown";
         return ResponseEntity.ok(productService.update(id, dto, updatedBy));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @Operation(summary = "Xóa mềm sản phẩm")
     public ResponseEntity<Void> delete(@PathVariable int id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";

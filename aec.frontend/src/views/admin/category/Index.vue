@@ -30,31 +30,16 @@ const svg = `
 
 // const emit = defineEmits(['show-alert'])
 
-const remove = (row) => {
+const remove = (id) => {
   ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
     confirmButtonText: 'Có',
     cancelButtonText: 'Quay lại',
     type: 'warning',
   })
     .then(() => {
-      ElNotification({
-        title: 'Success',
-        message: 'Delete completed',
-        type: 'success',
-        position: 'top-right', // 👈 Vị trí góc trên phải
-        duration: 3000,
-        customClass: 'custom-success-notification',
-      })
+      categoryStore.remove(id);
     })
     .catch(() => {
-      ElNotification({
-        title: 'Cancelled',
-        message: 'Delete canceled',
-        type: 'info',
-        position: 'top-right', // 👈 Vị trí góc trên phải
-        duration: 3000,
-        customClass: 'custom-secondary-notification',
-      })
     })
 }
 
@@ -129,7 +114,7 @@ const openForm = async (row) => {
                   <el-button
                     class="w-full !m-0 !justify-start"
                     text
-                    @click="remove(scope.row)"
+                    @click="remove(scope.row.id)"
                     :icon="Delete"
                     >Xoá</el-button
                   >
