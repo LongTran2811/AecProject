@@ -1,6 +1,7 @@
 package com.example.aecbackend.controller;
 
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.aecbackend.dto.ProductDTO.ProductRequestDTO;
 import com.example.aecbackend.dto.ProductDTO.ProductResponseDTO;
-import com.example.aecbackend.entity.Product;
 import com.example.aecbackend.service.ProductServ.ProductService;
-
-import com.example.aecbackend.dto.CategoryDTO.CategoryRequestDTO;
-import com.example.aecbackend.dto.CategoryDTO.CategoryResponseDTO;
-import com.example.aecbackend.service.CategoryServ.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -65,6 +61,11 @@ public class ProductController {
         productService.delete(id, deletedBy);
         return ResponseEntity.noContent().build();
     }
-
+    @Operation(summary = "Xóa mềm nhiều sản phẩm")
+    @PutMapping("softProductDeleteMultiple")
+    public ResponseEntity<Void> softDeleteProducts(@RequestBody List<Integer> ids) {
+        productService.softDeleteProducts(ids, "unknown");
+        return ResponseEntity.noContent().build();
+    }
 
 }

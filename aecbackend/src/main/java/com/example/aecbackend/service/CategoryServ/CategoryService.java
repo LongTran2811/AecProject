@@ -11,4 +11,5 @@ public interface CategoryService {
     CategoryResponseDTO create(CategoryRequestDTO dto , String createdBy);
     CategoryResponseDTO update(int id , CategoryRequestDTO dto, String updatedBy);
     void delete(int id , String deletedBy);
+    void softDeleteMultiple(List<Integer> ids, String deletedBy);
 }

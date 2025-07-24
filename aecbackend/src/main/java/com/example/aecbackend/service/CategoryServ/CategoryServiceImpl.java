@@ -61,4 +61,17 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDeletedBy(deletedBy);
         repository.save(category); // Soft delete
     }
+
+    @Override
+    public void softDeleteMultiple(List<Integer> ids, String deletedBy) {
+        List<Category> categories = repository.findAllById(ids);
+    LocalDateTime now = LocalDateTime.now();
+
+    for (Category category : categories) {
+        category.setDeletedAt(now);
+        category.setDeletedBy("unknown"); // Hoặc lấy từ JWT nếu có
+    }
+
+    repository.saveAll(categories);
+}
 }

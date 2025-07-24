@@ -62,4 +62,10 @@ public class CategoryController {
         categoryService.delete(id, deletedBy);
         return ResponseEntity.noContent().build();
     }
+    @Operation(summary = "Xóa mềm nhiều danh mục")
+    @PutMapping("softDeleteMultiple")
+    public ResponseEntity<Void> softDeleteMultiple(@RequestBody List<Integer> ids) {
+        categoryService.softDeleteMultiple(ids, "unknown");
+    return ResponseEntity.noContent().build();
+    }
 }

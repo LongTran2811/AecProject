@@ -2,6 +2,7 @@ package com.example.aecbackend.service.ProductServ;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import com.example.aecbackend.dto.ProductDTO.ProductRequestDTO;
@@ -58,19 +59,36 @@ public class ProductServiceImpl implements ProductService {
         productRepo.save(product);
     }
 
-        @Override
-    public List<ProductResponseDTO> getAll() {
-        return productRepo.findAll().stream()
-                .filter(product -> product.getDeletedAt() == null)
-                .map(productMapper::toDTO)
-                .toList();
-    }
+    //     @Override
+    // public List<ProductResponseDTO> getAll() {
+    //     return productRepo.findAll().stream()
+    //             .filter(product -> product.getDeletedAt() == null)
+    //             .map(productMapper::toDTO)
+    //             .toList();
+    // }
         @Override
         public ProductResponseDTO getById(int id) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         return productMapper.toDTO(product);
         }
+    @Override
+    public void softDeleteProducts(List<Integer> ids, String deletedBy) {
+        List<Product> products = productRepo.findByIdIn(ids);
+        LocalDateTime now = LocalDateTime.now();
+        for (Product product : products) {
+            product.setDeletedAt(now);
+            product.setDeletedBy(deletedBy);
+        }
+        productRepo.saveAll(products);
+    }
+    @Override
+    public List<ProductResponseDTO> getAll() {
+        return productRepo.findAllByDeletedAtIsNull()
+                .stream()
+                .map(productMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
     
 }
