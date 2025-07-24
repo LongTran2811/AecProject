@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.aecbackend.dto.ProductDTO.ProductRequestDTO;
 import com.example.aecbackend.dto.ProductDTO.ProductResponseDTO;
+import com.example.aecbackend.payload.ApiResponse;
+import com.example.aecbackend.payload.SoftDeleteRequest;
 import com.example.aecbackend.service.ProductServ.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,9 +65,10 @@ public class ProductController {
     }
     @Operation(summary = "Xóa mềm nhiều sản phẩm")
     @PutMapping("softProductDeleteMultiple")
-    public ResponseEntity<Void> softDeleteProducts(@RequestBody List<Integer> ids) {
-        productService.softDeleteProducts(ids, "unknown");
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
+        String deletedBy = request.getDeletedBy() != null ? request.getDeletedBy() : "unknown";
+        productService.softDeleteProducts(request.getIds(), deletedBy);
+        return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xoá thành công"));
     }
 
 }

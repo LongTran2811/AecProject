@@ -9,5 +9,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // Additional query methods can be defined here if needed
     List<Product> findByIdIn(List<Integer> ids);
     List<Product> findAllByDeletedAtIsNull();
+    List<Product> findByDeletedFalse();
     
 } 

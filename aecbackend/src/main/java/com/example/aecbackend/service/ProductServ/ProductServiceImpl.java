@@ -79,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : products) {
             product.setDeletedAt(now);
             product.setDeletedBy(deletedBy);
+            product.setUpdatedAt(now);
         }
         productRepo.saveAll(products);
     }

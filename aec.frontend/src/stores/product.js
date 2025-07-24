@@ -3,35 +3,47 @@ import { defineStore } from 'pinia'
 import api from '@/axios/api';
 import { ElNotification, ElMessageBox } from 'element-plus'
 
-export const useCategoryStore = defineStore('category', () => {
+export const useProductStore = defineStore('product', () => {
   const initModel = () => ({
     id: null,
+    categoryId: null,
     title: null,
-    image: null
+    detail: null,
+    image: null,
+    priceOriginal: null,
+    priceOfficial: null,
+    priceType: null,
+    status: null,
+    priorityLevel: null,
+    createdAt: null,
+    createdBy: null,
+    updatedAt: null,
+    updatedBy: null,
+    deletedAt: null,
+    deletedBy: null,
   });
-  const categories = ref([]);
-  const category = ref(initModel());
+  const products = ref([]);
+  const product = ref(initModel());
   const reLoaded = ref(false);
   const isLoading = ref(false);
 
   function getList() {
     isLoading.value = true;
-    api.get('/categories')
+    api.get('/products')
       .then((response) => {
-        categories.value = response.data;
+        products.value = response.data;
         isLoading.value = false;
       })
-      .catch(err => {
+      .catch((err) => {
         isLoading.value = true;
-        console.error("Error: ", err)
+        console.error("Error: ", err);
       });
-  }
-
+  };
   function getById(id) {
     isLoading.value = true;
-    api.get(`/categories/getId/${id}`)
+    api.get(`/products/getId/${id}`)
       .then((response) => {
-        category.value = response.data;
+        product.value = response.data;
         isLoading.value = false;
       })
       .catch((err) => {
@@ -40,11 +52,10 @@ export const useCategoryStore = defineStore('category', () => {
       });
   }
   async function create(payload) {
-    resetForm();
     isLoading.value = true;
-    await api.post('/categories/create', payload)
+    await api.post('/products/create', payload)
       .then(() => {
-        category.value = initModel();
+        product.value = initModel();
         ElNotification({
           title: 'Thông báo',
           message: 'Đã thêm thành công',
@@ -54,26 +65,25 @@ export const useCategoryStore = defineStore('category', () => {
           customClass: 'custom-success-notification',
         });
         isLoading.value = false;
-      })
-      .catch((err) => {
+      }).catch((err) => {
         isLoading.value = true;
         ElNotification({
           title: 'Thông báo',
           message: 'Lỗi: ' + err,
           type: 'danger',
-          position: 'top-right', // 👈 Vị trí góc trên phải
+          position: 'top-right',
           duration: 3000,
           customClass: 'custom-danger-notification',
         });
         console.error("Error: ", err);
       });
   }
-
   async function update(payload) {
+    resetForm();
     isLoading.value = true;
-    await api.put(`/categories/update/${payload.id}`, payload)
+    await api.put(`/products/update/${payload.id}`, payload)
       .then(() => {
-        category.value = initModel();
+        product.value = initModel();
         ElNotification({
           title: 'Thông báo',
           message: 'Đã cập nhật thành công',
@@ -83,8 +93,7 @@ export const useCategoryStore = defineStore('category', () => {
           customClass: 'custom-success-notification',
         });
         isLoading.value = false;
-      })
-      .catch((err) => {
+      }).catch((err) => {
         isLoading.value = true;
         ElNotification({
           title: 'Thông báo',
@@ -99,10 +108,10 @@ export const useCategoryStore = defineStore('category', () => {
   }
   async function remove(id) {
     isLoading.value = true;
-    await api.delete(`/categories/delete/${id}`)
-      .then(() => {
-        category.value = initModel();
-        ElNotification({
+    await api.delete(`/products/delete/${id}`)
+    .then(() => {
+      product.value = initModel();
+      ElNotification({
           title: 'Thông báo',
           message: 'Đã xoá thành công',
           type: 'success',
@@ -111,8 +120,8 @@ export const useCategoryStore = defineStore('category', () => {
           customClass: 'custom-success-notification',
         });
         isLoading.value = false;
-      })
-      .catch((err) => {
+    })
+    .catch((err) => {
         isLoading.value = true;
         ElNotification({
           title: 'Thông báo',
@@ -126,12 +135,11 @@ export const useCategoryStore = defineStore('category', () => {
       });
   }
   function resetForm() {
-    category.value = initModel();
+    product.value = initModel();
   }
-
   return {
-    categories,
-    category,
+    product,
+    products,
     reLoaded,
     isLoading,
     getList,

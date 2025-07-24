@@ -13,4 +13,6 @@ public interface ProductService {
     Object getById(int id);
     void softDeleteProducts(List<Integer> ids, String deletedBy);
     
+
+    
 } 

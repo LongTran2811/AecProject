@@ -32,27 +32,31 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Lấy tất cả danh mục")
-    public ResponseEntity<List<CategoryResponseDTO>> getAll() {
-        return ResponseEntity.ok(categoryService.getAll());
+    public ResponseEntity<?> getAll() {
+        List<CategoryResponseDTO> data = categoryService.getAll();
+        return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Success"));
     }
 
     @GetMapping("getId/{id}")
     @Operation(summary = "Lấy danh mục theo ID")
-    public ResponseEntity<CategoryResponseDTO> getById(@PathVariable int id) {
-        return ResponseEntity.ok(categoryService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable int id) {
+        CategoryResponseDTO data = categoryService.getById(id);
+        return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Success"));
     }
 
     @PostMapping("create")
     @Operation(summary = "Tạo mới danh mục")
-    public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryRequestDTO dto) {
-        return ResponseEntity.ok(categoryService.create(dto, "admin")); // "admin" nên lấy từ JWT
+    public ResponseEntity<?> create(@Valid @RequestBody CategoryRequestDTO dto) {
+        CategoryResponseDTO data = categoryService.create(dto, "admin"); // "admin" nên lấy từ JWT
+        return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Created successfully"));
     }
 
     @PutMapping("update/{id}")
     @Operation(summary = "Cập nhật danh mục")
-    public ResponseEntity<CategoryResponseDTO> update(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
+    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
         if (updatedBy == null) updatedBy = "unknown";
-        return ResponseEntity.ok(categoryService.update(id, dto, updatedBy));
+        CategoryResponseDTO data = categoryService.update(id, dto, updatedBy);
+        return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Updated successfully"));
     }
 
     @DeleteMapping("delete/{id}")
@@ -64,8 +68,8 @@ public class CategoryController {
     }
     @Operation(summary = "Xóa mềm nhiều danh mục")
     @PutMapping("softDeleteMultiple")
-    public ResponseEntity<Void> softDeleteMultiple(@RequestBody List<Integer> ids) {
+    public ResponseEntity<?> softDeleteMultiple(@RequestBody List<Integer> ids) {
         categoryService.softDeleteMultiple(ids, "unknown");
-    return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(ids.size(), 1, "Đã xoá thành công"));
     }
 }
