@@ -67,7 +67,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
     @Operation(summary = "Xóa mềm nhiều danh mục")
-    @PutMapping("softDeleteMultiple")
+    @PutMapping("delete_multiple")
     public ResponseEntity<?> softDeleteMultiple(@RequestBody List<Integer> ids) {
         categoryService.softDeleteMultiple(ids, "unknown");
         return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(ids.size(), 1, "Đã xoá thành công"));

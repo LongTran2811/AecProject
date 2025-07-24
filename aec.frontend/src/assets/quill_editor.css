@@ -1,0 +1,264 @@
+.ql-align-center {
+  text-align: center !important;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
+
+.ql-bold {
+  font-weight: bold;
+}
+
+.ql-italic {
+  font-style: italic;
+}
+
+.ql-underline {
+  text-decoration: underline;
+}
+
+.ql-strike {
+  text-decoration: line-through;
+}
+
+.ql-header-1 h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.67em 0;
+}
+
+.ql-header-2 h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.75em 0;
+}
+
+:deep(.article-content table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}
+
+:deep(.article-content th),
+:deep(.article-content td) {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+:deep(.article-content th) {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.article-content img {
+  display: inline-block;
+  max-width: 150px;
+  margin-right: 8px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.article-content p {
+  /* display: inline-block; */
+  margin-right: 1.5rem;
+  margin-bottom: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Loại bỏ margin/padding thừa của block */
+:deep(.ql-editor p) {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.6 !important;
+  display: inline !important;
+}
+
+/* Đảm bảo container không bị ngắt dòng */
+:deep(.ql-editor) {
+  word-wrap: break-word !important;
+  white-space: normal !important;
+  display: block !important;
+}
+
+/* Đảm bảo ảnh không bị ngắt dòng */
+:deep(.ql-editor .ql-image) {
+  display: inline !important;
+  margin: 0 4px !important;
+}
+
+/* Force inline cho tất cả ảnh */
+:deep(.ql-editor *:has(img)) {
+  display: inline !important;
+}
+
+/* Đảm bảo ảnh không bị wrap */
+:deep(.ql-editor img) {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+}
+
+.article-content .image-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.article-content .image-row img {
+  max-width: 200px;
+  height: auto;
+  margin: 0;
+}
+
+/* Ép các thẻ p, div chỉ chứa ảnh về inline để ảnh nằm cùng dòng */
+.article-content p:has(img:only-child),
+.article-content div:has(img:only-child) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.article-content p:only-child,
+.article-content div:only-child {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Đảm bảo các block align là block */
+.article-content p.ql-align-center,
+.article-content p.ql-align-right,
+.article-content p.ql-align-left,
+.article-content p.ql-align-justify,
+.article-content div.ql-align-center,
+.article-content div.ql-align-right,
+.article-content div.ql-align-left,
+.article-content div.ql-align-justify,
+.article-content h1.ql-align-center,
+.article-content h2.ql-align-center,
+.article-content h3.ql-align-center {
+  display: block !important;
+}
+
+/* Đảm bảo align đúng */
+.article-content .ql-align-center {
+  text-align: center !important;
+}
+
+.article-content .ql-align-right {
+  text-align: right !important;
+}
+
+.article-content .ql-align-left {
+  text-align: left !important;
+}
+
+.article-content .ql-align-justify {
+  text-align: justify !important;
+}
+
+/* Ảnh only-child vẫn inline-block nếu cần */
+.article-content img:only-child {
+  display: inline-block !important;
+}
+
+/* Style cho bảng Quill Better Table */
+.article-content .qlbt-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}
+
+.article-content .qlbt-cell-line {
+  display: table-cell;
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 40px;
+  word-break: break-word;
+}
+
+.qlbt-cell-line strong,
+.qlbt-cell-line span {
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.qlbt-cell-line.ql-align-center {
+  text-align: center !important;
+}
+
+.qlbt-cell-line.ql-align-right {
+  text-align: right !important;
+}
+
+.qlbt-cell-line.ql-align-left {
+  text-align: left !important;
+}
+
+.qlbt-cell-line[data-rowspan] {
+  vertical-align: middle;
+}
+
+.qlbt-cell-line[data-colspan] {
+  /* nothing, just for selector */
+}
+
+/* Table wrapper fix */
+.quill-better-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.quill-better-table {
+  border-collapse: collapse;
+  width: 100% !important;
+  font-size: 1.125rem;
+  background: #fff;
+}
+
+.quill-better-table td,
+.quill-better-table th {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem;
+  text-align: center;
+  vertical-align: middle;
+  background: #fff;
+}
+
+.quill-better-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+}
+
+/* Đảm bảo các dòng tiêu đề bảng giờ tàu nổi bật */
+h3 span[style*="font-size: 24px"] {
+  font-size: 24px !important;
+  background: #f5f5f5 !important;
+  color: #333 !important;
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+}
+
+/* Căn lề cho chú thích dưới bảng */
+p.ql-align-right em {
+  font-size: 14px !important;
+  background: #f5f5f5 !important;
+  color: #333 !important;
+  padding: 0.1em 0.5em;
+  border-radius: 4px;
+}

@@ -26,12 +26,14 @@
           </template>
         </el-menu-item>
       </RouterLink>
-      <el-menu-item index="2-2">
+      <RouterLink to="/admin/product">
+        <el-menu-item index="2-2">
         <template #title>
           <i class="fa-solid fa-list"></i>
           <span class="ml-2.5">Sản phẩm</span>
         </template>
       </el-menu-item>
+      </RouterLink>
     </el-sub-menu>
 
     <RouterLink to="/admin">

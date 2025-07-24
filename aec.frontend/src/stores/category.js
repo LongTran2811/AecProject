@@ -18,7 +18,22 @@ export const useCategoryStore = defineStore('category', () => {
     isLoading.value = true;
     api.get('/categories')
       .then((response) => {
-        categories.value = response.data;
+        categories.value = response.data.data;
+        isLoading.value = false;
+      })
+      .catch(err => {
+        isLoading.value = true;
+        console.error("Error: ", err)
+      });
+  }
+  function getListByTen() {
+    isLoading.value = true;
+    api.get('/categories')
+      .then((response) => {
+        categories.value = response.data.data.map(x => ({
+          label: `${x.title}`,
+          value: x.id
+        }));
         isLoading.value = false;
       })
       .catch(err => {
@@ -139,6 +154,7 @@ export const useCategoryStore = defineStore('category', () => {
     resetForm,
     create,
     update,
-    remove
+    remove,
+    getListByTen
   }
 })
