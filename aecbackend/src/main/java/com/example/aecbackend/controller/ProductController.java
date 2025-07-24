@@ -64,7 +64,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
     @Operation(summary = "Xóa mềm nhiều sản phẩm")
-    @PutMapping("softProductDeleteMultiple")
+    @PutMapping("DeleteMultiple")
     public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
         String deletedBy = request.getDeletedBy() != null ? request.getDeletedBy() : "unknown";
         productService.softDeleteProducts(request.getIds(), deletedBy);
