@@ -15,6 +15,8 @@ const productStore = useProductStore()
 const { product } = storeToRefs(productStore)
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
+const formRef = ref<FormInstance>()
+
 const rules = {
   id: { required },
   categoryId: { required },
@@ -39,22 +41,29 @@ function onHide() {
   v$.value.$reset()
 }
 async function onSave() {
-  const isFormCorrect = await v$.value.$validate()
-  if (!isFormCorrect) return
+    console.log('onSave called') // ← kiểm tra có in không
+  // const isFormCorrect = await v$.value.$validate()
+  // if (!isFormCorrect) return
   const payload = {
     ...product.value,
+    createdBy: product.value.createdBy || 'admin', // hoặc lấy từ userStore
+    createdAt: product.value.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    updatedBy: 'admin',
   }
   try {
-    if (!product.value.id) {
+    const isNew = !product.value.id || String(product.value.id).trim() === ''
+    if (isNew) {
       await productStore.create(payload)
     } else {
       await productStore.update(payload)
     }
-    router.push('admin/product')
+    router.push('/admin/product')
   } catch (error) {
     console.error('Error: ', error)
   }
 }
+
 onMounted(() => {
   categoryStore.getListByTen()
 })
@@ -67,11 +76,11 @@ onMounted(() => {
     </div>
     <div class="w-full flex gap-4">
       <el-card class="!w-1/3">
-        <el-form :model="product" :rules="rules" label-position="top">
+        <el-form :ref="formRef" :model="product" :rules="rules" label-position="top">
           <!-- <el-form-item label="Mã sản phẩm" prop="id" label-postition="top">
             <el-input v-model="product.id" />
           </el-form-item> -->
-          <el-form-item label="Danh mục" prop="title">
+          <el-form-item label="Danh mục" prop="categoryId">
             <el-select v-model="product.categoryId" clearable placeholder="Chọn danh mục">
               <el-option
                 v-for="item in categories"
@@ -93,10 +102,13 @@ onMounted(() => {
           <el-form-item label="Giá bán" prop="priceOfficial">
             <el-input v-model="product.priceOfficial" />
           </el-form-item>
+          <el-form-item label="Đơn vị" prop="priceType">
+            <el-input v-model="product.priceType" />
+          </el-form-item>
           <el-form-item label="Giá gốc" prop="priceOriginal">
             <el-switch
               v-model="product.status"
-              active-value="1"
+              :active-value="1"
               :inactive-value="0"
               active-text="Hoạt động"
               inactive-text="Không hoạt động"

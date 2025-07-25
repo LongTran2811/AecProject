@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     // Thêm hàm sinh id random
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
     private String generateRandomId() {
         StringBuilder sb = new StringBuilder(10);

@@ -36,17 +36,15 @@ const remove = (id) => {
     type: 'warning',
   })
     .then(() => {
-      productStore.remove(id);
+      productStore.remove(id)
     })
-    .catch(() => {
-    })
+    .catch(() => {})
 }
-
 
 // Handle Create
 const formDialogRef = ref()
 const openForm = async (row) => {
-    router.push('/admin/form-product')
+  router.push('/admin/form-product')
   if (row && row.id) {
     await productStore.getById(row.id)
   } else {
@@ -84,58 +82,61 @@ const openForm = async (row) => {
         </div>
       </div>
       <div>
-        <div style="overflow-x: auto; max-height: 500px;">
-  <el-table
-    v-loading="isLoading"
-    :element-loading-svg="svg"
-    element-loading-text="Đang tải dữ liệu..."
-    element-loading-svg-view-box="-10, -10, 50, 50"
-    :data="products"
-    style="min-width: 1000px"
-  >
-    <el-table-column type="selection" width="55" />
-    <el-table-column prop="id" label="ID" width="80" />
-    <el-table-column prop="title" label="Tên danh mục" />
-    <el-table-column label="Hình ảnh">
-      <template #default="scope">
-        <img :src="scope.row.image + '/thumb'" alt="Ảnh" class="w-16 h-16 object-cover rounded border" />
-      </template>
-    </el-table-column>
-    <el-table-column prop="priceOriginal" label="Giá gốc" />
-    <el-table-column prop="priceOfficial" label="Giá chính thức" />
-    <el-table-column prop="priceType" label="Đơn vị" />
-    <el-table-column prop="status" label="Trạng thái" />
-    <el-table-column prop="priorityLevel" label="Mức ưu tiên" />
-    <el-table-column fixed="right" label="Tác vụ" min-width="120">
-      <template #default="scope">
-        <el-popover placement="bottom-start" trigger="click">
-          <div class="flex flex-col items-start space-y-2">
-            <el-button
-              class="w-full !m-0 !justify-start"
-              text
-              @click="openForm(scope.row)"
-              :icon="Edit"
-              >Sửa</el-button
-            >
-            <el-button
-              class="w-full !m-0 !justify-start"
-              text
-              @click="remove(scope.row.id)"
-              :icon="Delete"
-              >Xoá</el-button
-            >
-          </div>
-          <template #reference>
-            <el-button type="secondary" size="small">
-              <el-icon><MoreFilled /></el-icon>
-            </el-button>
-          </template>
-        </el-popover>
-      </template>
-    </el-table-column>
-  </el-table>
-</div>
-
+        <div style="overflow-x: auto; max-height: 500px">
+          <el-table
+            v-loading="isLoading"
+            :element-loading-svg="svg"
+            element-loading-text="Đang tải dữ liệu..."
+            element-loading-svg-view-box="-10, -10, 50, 50"
+            :data="products"
+            style="min-width: 1000px"
+          >
+            <el-table-column type="selection" width="55" />
+            <el-table-column prop="id" label="ID" width="80" />
+            <el-table-column prop="title" label="Tên danh mục" />
+            <el-table-column label="Hình ảnh">
+              <template #default="scope">
+                <img
+                  :src="scope.row.image + '/thumb'"
+                  alt="Ảnh"
+                  class="w-16 h-16 object-cover rounded border"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column prop="priceOriginal" label="Giá gốc" />
+            <el-table-column prop="priceOfficial" label="Giá chính thức" />
+            <el-table-column prop="priceType" label="Đơn vị" />
+            <el-table-column prop="status" label="Trạng thái" />
+            <el-table-column prop="priorityLevel" label="Mức ưu tiên" />
+            <el-table-column fixed="right" label="Tác vụ" min-width="120">
+              <template #default="scope">
+                <el-popover placement="bottom-start" trigger="click">
+                  <div class="flex flex-col items-start space-y-2">
+                    <el-button
+                      class="w-full !m-0 !justify-start"
+                      text
+                      @click="openForm(scope.row)"
+                      :icon="Edit"
+                      >Sửa</el-button
+                    >
+                    <el-button
+                      class="w-full !m-0 !justify-start"
+                      text
+                      @click="remove(scope.row.id)"
+                      :icon="Delete"
+                      >Xoá</el-button
+                    >
+                  </div>
+                  <template #reference>
+                    <el-button type="secondary" size="small">
+                      <el-icon><MoreFilled /></el-icon>
+                    </el-button>
+                  </template>
+                </el-popover>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
     </el-card>
   </div>
