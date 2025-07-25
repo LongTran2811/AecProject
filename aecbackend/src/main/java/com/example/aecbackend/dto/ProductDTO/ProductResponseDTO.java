@@ -3,9 +3,8 @@ package com.example.aecbackend.dto.ProductDTO;
 import java.time.LocalDateTime;
 
 public class ProductResponseDTO {
-    private Integer id;
+    private String id;
     private String title;
-    private String detail;
     private String image;
     private Integer priceOriginal;
     private Integer priceOfficial;
@@ -22,11 +21,11 @@ public class ProductResponseDTO {
     private String categoryTitle;
 
     // Getters and Setters
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -36,14 +35,6 @@ public class ProductResponseDTO {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDetail() {
-        return detail == null || detail.trim().isEmpty() ? "unknown" : detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
     }
 
     public String getImage() {

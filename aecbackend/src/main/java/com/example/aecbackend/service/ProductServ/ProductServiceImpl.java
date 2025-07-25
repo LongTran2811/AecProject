@@ -3,6 +3,8 @@ package com.example.aecbackend.service.ProductServ;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
+import java.security.SecureRandom;
 
 import org.springframework.stereotype.Service;
 import com.example.aecbackend.dto.ProductDTO.ProductRequestDTO;
@@ -24,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO create(ProductRequestDTO dto, String createdBy) {
         Product product = productMapper.toEntity(dto);
+        product.setId(generateRandomId());
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         product.setCategoryId(category);
@@ -91,5 +94,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    
+    // Thêm hàm sinh id random
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final SecureRandom RANDOM = new SecureRandom();
+    private String generateRandomId() {
+        StringBuilder sb = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+    }
 }
