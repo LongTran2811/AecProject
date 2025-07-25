@@ -39,7 +39,7 @@ public class ProductController {
 
     @GetMapping("getId/{id}")
     @Operation(summary = "Lấy sản phẩm theo ID")
-    public ResponseEntity<Object> getById(@PathVariable int id) {
+    public ResponseEntity<Object> getById(@PathVariable String id) {
         return ResponseEntity.ok(productService.getById(id));
     }
 
@@ -51,14 +51,14 @@ public class ProductController {
 
     @PutMapping("update/{id}")
     @Operation(summary = "Cập nhật sản phẩm")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable int id, @Valid @RequestBody ProductRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable String id, @Valid @RequestBody ProductRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
         if (updatedBy == null) updatedBy = "unknown";
         return ResponseEntity.ok(productService.update(id, dto, updatedBy));
     }
 
     @DeleteMapping("delete/{id}")
     @Operation(summary = "Xóa mềm sản phẩm")
-    public ResponseEntity<Void> delete(@PathVariable int id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";
         productService.delete(id, deletedBy);
         return ResponseEntity.noContent().build();
@@ -67,7 +67,8 @@ public class ProductController {
     @PutMapping("delete_multiple")
     public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
         String deletedBy = request.getDeletedBy() != null ? request.getDeletedBy() : "unknown";
-        productService.softDeleteProducts(request.getIds(), deletedBy);
+        List<String> stringIds = request.getIds().stream().map(String::valueOf).toList();
+        productService.softDeleteProducts(stringIds, deletedBy);
         return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xoá thành công"));
     }
 
