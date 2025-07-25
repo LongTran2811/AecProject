@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDTO(productRepo.save(product));
     }
     @Override
-    public ProductResponseDTO update (int id, ProductRequestDTO dto, String updatedBy) {
+    public ProductResponseDTO update (String id, ProductRequestDTO dto, String updatedBy) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Category category = categoryRepo.findById(dto.getCategoryId())
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDTO(productRepo.save(product));
     }
     @Override
-    public void delete(Integer id, String deletedBy) {
+    public void delete(String id, String deletedBy) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         product.setDeletedAt(LocalDateTime.now());
@@ -70,13 +70,13 @@ public class ProductServiceImpl implements ProductService {
     //             .toList();
     // }
         @Override
-        public ProductResponseDTO getById(int id) {
+        public ProductResponseDTO getById(String id) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         return productMapper.toDTO(product);
         }
     @Override
-    public void softDeleteProducts(List<Integer> ids, String deletedBy) {
+    public void softDeleteProducts(List<String> ids, String deletedBy) {
         List<Product> products = productRepo.findByIdIn(ids);
         LocalDateTime now = LocalDateTime.now();
         for (Product product : products) {
