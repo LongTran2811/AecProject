@@ -16,6 +16,8 @@ import com.example.aecbackend.repository.CategoryRepository;
 import com.example.aecbackend.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -24,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepo;
     private final ProductMapper productMapper;
     @Override
+    @Transactional
     public ProductResponseDTO create(ProductRequestDTO dto, String createdBy) {
         Product product = productMapper.toEntity(dto);
         product.setId(generateRandomId());
@@ -32,34 +35,61 @@ public class ProductServiceImpl implements ProductService {
         product.setCategoryId(category);
         product.setCreatedAt(LocalDateTime.now());
         product.setCreatedBy(createdBy);
+        
+        // Xử lý priorityLevel trước khi lưu
+        handlePriorityLevel(product, dto.getPriorityLevel());
+        
         return productMapper.toDTO(productRepo.save(product));
     }
     @Override
+    @Transactional
     public ProductResponseDTO update (String id, ProductRequestDTO dto, String updatedBy) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-          product.setTitle(dto.getTitle());
+        
+        // Lưu priorityLevel cũ để so sánh
+        Integer oldPriorityLevel = product.getPriorityLevel();
+        
+        // Cập nhật thông tin sản phẩm
+        product.setTitle(dto.getTitle());
         product.setDetail(dto.getDetail());
         product.setImage(dto.getImage());
         product.setPriceOriginal(dto.getPriceOriginal());
         product.setPriceOfficial(dto.getPriceOfficial());
         product.setPriceType(dto.getPriceType());
         product.setStatus(dto.getStatus());
-        product.setPriorityLevel(dto.getPriorityLevel());
         product.setUpdatedAt(LocalDateTime.now());
         product.setUpdatedBy(updatedBy);
         product.setCategoryId(category);
+        
+        // Xử lý priorityLevel nếu có thay đổi
+        if (!oldPriorityLevel.equals(dto.getPriorityLevel())) {
+            // Trước tiên, xử lý như thể sản phẩm cũ bị xóa khỏi vị trí cũ
+            handlePriorityLevelAfterDelete(oldPriorityLevel);
+            
+            // Sau đó, xử lý như thể thêm sản phẩm mới vào vị trí mới
+            handlePriorityLevel(product, dto.getPriorityLevel());
+        }
+        
         return productMapper.toDTO(productRepo.save(product));
     }
     @Override
+    @Transactional
     public void delete(String id, String deletedBy) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+        
+        // Lưu priorityLevel của sản phẩm bị xóa
+        Integer deletedPriorityLevel = product.getPriorityLevel();
+        
         product.setDeletedAt(LocalDateTime.now());
         product.setDeletedBy(deletedBy);
         productRepo.save(product);
+        
+        // Xử lý dịch chuyển các sản phẩm sau khi xóa
+        handlePriorityLevelAfterDelete(deletedPriorityLevel);
     }
 
     //     @Override
@@ -103,5 +133,54 @@ public class ProductServiceImpl implements ProductService {
             sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
         }
         return sb.toString();
+    }
+
+    /**
+     * Xử lý logic priorityLevel khi thêm sản phẩm mới
+     * Khi thêm sản phẩm vào level X:
+     * - Các sản phẩm từ level X trở đi sẽ dồn lên 1 bậc (+1)
+     * - Sản phẩm nào bị đẩy lên vượt level 10 thì chuyển về level 0 (không ưu tiên)
+     */
+    private void handlePriorityLevel(Product newProduct, Integer newPriorityLevel) {
+        // Lấy tất cả sản phẩm có priorityLevel >= newPriorityLevel và chưa bị xóa
+        List<Product> productsToShift = productRepo.findByPriorityLevelGreaterThanEqualAndDeletedAtIsNullOrderByPriorityLevelAsc(newPriorityLevel);
+        
+        // Dịch chuyển các sản phẩm có priorityLevel >= newPriorityLevel lên 1 cấp
+        for (Product product : productsToShift) {
+            Integer newLevel = product.getPriorityLevel() + 1;
+            // Nếu vượt quá level 10 thì chuyển về level 0
+            if (newLevel > 10) {
+                product.setPriorityLevel(0);
+            } else {
+                product.setPriorityLevel(newLevel);
+            }
+            product.setUpdatedAt(LocalDateTime.now());
+            productRepo.save(product);
+        }
+        
+        // Đặt priorityLevel cho sản phẩm mới
+        newProduct.setPriorityLevel(newPriorityLevel);
+    }
+
+    /**
+     * Xử lý logic priorityLevel sau khi xóa sản phẩm
+     * Khi xóa sản phẩm ở level X:
+     * - Các sản phẩm phía sau priorityLevel > X sẽ lùi xuống 1 bậc (-1)
+     * - Các sản phẩm từ level 0 giữ nguyên
+     */
+    private void handlePriorityLevelAfterDelete(Integer deletedPriorityLevel) {
+        // Lấy tất cả sản phẩm có priorityLevel > deletedPriorityLevel và chưa bị xóa
+        List<Product> productsToShiftDown = productRepo.findByPriorityLevelGreaterThanAndDeletedAtIsNullOrderByPriorityLevelAsc(deletedPriorityLevel);
+        
+        // Dịch chuyển các sản phẩm có priorityLevel > deletedPriorityLevel xuống 1 cấp
+        for (Product product : productsToShiftDown) {
+            // Chỉ dịch chuyển nếu priorityLevel hiện tại > 0
+            if (product.getPriorityLevel() > 0) {
+                product.setPriorityLevel(product.getPriorityLevel() - 1);
+                product.setUpdatedAt(LocalDateTime.now());
+                productRepo.save(product);
+            }
+            // Các sản phẩm ở level 0 giữ nguyên
+        }
     }
 }

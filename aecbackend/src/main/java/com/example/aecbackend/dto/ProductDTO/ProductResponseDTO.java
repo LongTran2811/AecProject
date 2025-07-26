@@ -1,10 +1,13 @@
 package com.example.aecbackend.dto.ProductDTO;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductResponseDTO {
     private String id;
     private String title;
+    private String detail;
     private String image;
     private Integer priceOriginal;
     private Integer priceOfficial;
@@ -35,6 +38,19 @@ public class ProductResponseDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    // Method để ẩn detail khi cần
+    public void hideDetail() {
+        this.detail = null;
     }
 
     public String getImage() {

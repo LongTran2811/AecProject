@@ -20,8 +20,4 @@ public interface ProductMapper {
     @Mapping(target = "deletedAt", ignore = true)
     @Mapping(target = "deletedBy", ignore = true)
     Product toEntity(ProductRequestDTO dto);
-
-    
-    
-    
 } 
