@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
         // Xử lý priorityLevel nếu có thay đổi
         if (!oldPriorityLevel.equals(dto.getPriorityLevel())) {
             // Trước tiên, xử lý như thể sản phẩm cũ bị xóa khỏi vị trí cũ
-            handlePriorityLevelAfterDelete(oldPriorityLevel);
+            handlePriorityLevelAfterDelete(product);
             
             // Sau đó, xử lý như thể thêm sản phẩm mới vào vị trí mới
             handlePriorityLevel(product, dto.getPriorityLevel());
@@ -89,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
         productRepo.save(product);
         
         // Xử lý dịch chuyển các sản phẩm sau khi xóa
-        handlePriorityLevelAfterDelete(deletedPriorityLevel);
+        handlePriorityLevelAfterDelete(product);
     }
 
     //     @Override
@@ -124,6 +124,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductResponseDTO> getProductsByLevel() {
+        return productRepo.findByPriorityLevelGreaterThanAndDeletedAtIsNullOrderByPriorityLevelAsc(0)
+                .stream()
+                .map(productMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     // Thêm hàm sinh id random
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -145,19 +153,16 @@ public class ProductServiceImpl implements ProductService {
         // Lấy tất cả sản phẩm có priorityLevel >= newPriorityLevel và chưa bị xóa
         List<Product> productsToShift = productRepo.findByPriorityLevelGreaterThanEqualAndDeletedAtIsNullOrderByPriorityLevelAsc(newPriorityLevel);
         
-        // Dịch chuyển các sản phẩm có priorityLevel >= newPriorityLevel lên 1 cấp
+        // Dịch chuyển các sản phẩm có priorityLevel >= newPriorityLevel và < 10 lên 1 cấp
         for (Product product : productsToShift) {
-            Integer newLevel = product.getPriorityLevel() + 1;
-            // Nếu vượt quá level 10 thì chuyển về level 0
-            if (newLevel > 10) {
-                product.setPriorityLevel(0);
-            } else {
-                product.setPriorityLevel(newLevel);
+            Integer currentLevel = product.getPriorityLevel();
+            if (currentLevel >= newPriorityLevel && currentLevel < 10) {
+                product.setPriorityLevel(currentLevel + 1);
+                product.setUpdatedAt(LocalDateTime.now());
+                productRepo.save(product);
             }
-            product.setUpdatedAt(LocalDateTime.now());
-            productRepo.save(product);
+            // Nếu đã là 10 thì giữ nguyên
         }
-        
         // Đặt priorityLevel cho sản phẩm mới
         newProduct.setPriorityLevel(newPriorityLevel);
     }
@@ -165,22 +170,15 @@ public class ProductServiceImpl implements ProductService {
     /**
      * Xử lý logic priorityLevel sau khi xóa sản phẩm
      * Khi xóa sản phẩm ở level X:
-     * - Các sản phẩm phía sau priorityLevel > X sẽ lùi xuống 1 bậc (-1)
-     * - Các sản phẩm từ level 0 giữ nguyên
+     * - Sản phẩm bị xóa chuyển về level 0
+     * - Các sản phẩm còn lại giữ nguyên
      */
-    private void handlePriorityLevelAfterDelete(Integer deletedPriorityLevel) {
-        // Lấy tất cả sản phẩm có priorityLevel > deletedPriorityLevel và chưa bị xóa
-        List<Product> productsToShiftDown = productRepo.findByPriorityLevelGreaterThanAndDeletedAtIsNullOrderByPriorityLevelAsc(deletedPriorityLevel);
-        
-        // Dịch chuyển các sản phẩm có priorityLevel > deletedPriorityLevel xuống 1 cấp
-        for (Product product : productsToShiftDown) {
-            // Chỉ dịch chuyển nếu priorityLevel hiện tại > 0
-            if (product.getPriorityLevel() > 0) {
-                product.setPriorityLevel(product.getPriorityLevel() - 1);
-                product.setUpdatedAt(LocalDateTime.now());
-                productRepo.save(product);
-            }
-            // Các sản phẩm ở level 0 giữ nguyên
+    private void handlePriorityLevelAfterDelete(Product deletedProduct) {
+        // Chỉ chuyển sản phẩm bị xóa về level 0
+        if (deletedProduct != null) {
+            deletedProduct.setPriorityLevel(0);
+            deletedProduct.setUpdatedAt(LocalDateTime.now());
+            productRepo.save(deletedProduct);
         }
     }
 }

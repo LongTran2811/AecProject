@@ -11,4 +11,5 @@ public interface ProductService {
     List<ProductResponseDTO> getAll();
     ProductResponseDTO getById(String id);
     void softDeleteProducts(List<String> ids, String deletedBy);
+    List<ProductResponseDTO> getProductsByLevel();
 } 
