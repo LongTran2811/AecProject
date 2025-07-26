@@ -137,7 +137,8 @@ export const useProductStore = defineStore('product', () => {
   async function removes(ids) {
     isLoading.value = true;
     // console.log('Sending IDs for deletion:', ids); // Debug log
-    await api.put('/products/delete_multiple', ids)
+
+    await api.put('/products/removes', { ids })
       .then(() => {
         ElNotification({
           title: 'Thông báo',

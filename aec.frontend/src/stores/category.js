@@ -143,7 +143,7 @@ export const useCategoryStore = defineStore('category', () => {
   async function removes(ids) {
     isLoading.value = true;
     // console.log('Sending IDs for deletion:', ids); // Debug log
-    await api.put('/categories/delete_multiple', ids)
+    await api.put('/categories/removes', {ids:ids})
       .then(() => {
         ElNotification({
           title: 'Thông báo',

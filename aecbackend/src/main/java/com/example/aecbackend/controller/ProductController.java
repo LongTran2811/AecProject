@@ -80,7 +80,7 @@ public class ProductController {
         }});
     }
 
-    @GetMapping("/all")
+    @GetMapping
     @Operation(summary = "Lấy tất cả sản phẩm ")
     public ResponseEntity<List<ProductResponseDTO>> getAllProductsHideDetail() {
         List<ProductResponseDTO> products = productService.getAll();
