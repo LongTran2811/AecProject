@@ -2,6 +2,7 @@ package com.example.aecbackend.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +33,7 @@ public class ProductController {
     this.productService = productService;
    }
    private final ProductService productService;
-    @GetMapping("/getproductbylevel")
+    @GetMapping("/level")
     @Operation(summary = "Lấy tất cả sản phẩm có level")
     public ResponseEntity<List<ProductResponseDTO>> getProductsByLevel() {
         List<ProductResponseDTO> products = productService.getProductsByLevel();
@@ -41,26 +42,26 @@ public class ProductController {
     }
     
 
-    @GetMapping("getId/{id}")
+    @GetMapping("/getId/{id}")
     @Operation(summary = "Lấy sản phẩm theo ID")
     public ResponseEntity<Object> getById(@PathVariable String id) {
         return ResponseEntity.ok(productService.getById(id));
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     @Operation(summary = "Tạo mới sản phẩm")
     public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO dto) {
         return ResponseEntity.ok(productService.create(dto, "unknown")); // "admin" nên lấy từ JWT
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @Operation(summary = "Cập nhật sản phẩm")
     public ResponseEntity<ProductResponseDTO> update(@PathVariable String id, @Valid @RequestBody ProductRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
         if (updatedBy == null) updatedBy = "unknown";
         return ResponseEntity.ok(productService.update(id, dto, updatedBy));
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/remove/{id}")
     @Operation(summary = "Xóa mềm sản phẩm")
     public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";
@@ -68,11 +69,15 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
     @Operation(summary = "Xóa mềm nhiều sản phẩm")
-    @PutMapping("delete_multiple")
+
+    @PutMapping("removes")
     public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
         String deletedBy = request.getDeletedBy() != null ? request.getDeletedBy() : "unknown";
-        productService.softDeleteProducts(request.getIds(), deletedBy);
-        return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xóa thành công"));
+        int deletedCount = productService.softDeleteProducts(request.getIds(), deletedBy);
+        return ResponseEntity.ok(new java.util.HashMap<String, Object>() {{
+            put("data", deletedCount);
+            put("message", "Đã xóa thành công");
+        }});
     }
 
     @GetMapping("/all")

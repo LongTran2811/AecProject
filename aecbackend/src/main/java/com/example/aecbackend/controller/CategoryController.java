@@ -53,21 +53,26 @@ public class CategoryController {
 
     @PutMapping("update/{id}")
     @Operation(summary = "Cập nhật danh mục")
-    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO dto, @RequestParam(value = "updatedBy", required = false) String updatedBy) {
-        if (updatedBy == null) updatedBy = "unknown";
+    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO dto,
+            @RequestParam(value = "updatedBy", required = false) String updatedBy) {
+        if (updatedBy == null)
+            updatedBy = "unknown";
         CategoryResponseDTO data = categoryService.update(id, dto, updatedBy);
         return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Updated successfully"));
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("remove/{id}")
     @Operation(summary = "Xóa mềm danh mục")
-    public ResponseEntity<Void> delete(@PathVariable int id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
-        if (deletedBy == null) deletedBy = "unknown";
+    public ResponseEntity<Void> delete(@PathVariable int id,
+            @RequestParam(value = "deletedBy", required = false) String deletedBy) {
+        if (deletedBy == null)
+            deletedBy = "unknown";
         categoryService.delete(id, deletedBy);
         return ResponseEntity.noContent().build();
     }
+
     @Operation(summary = "Xóa mềm nhiều danh mục")
-    @PutMapping("delete_multiple")
+    @PutMapping("removes")
     public ResponseEntity<?> softDeleteMultiple(@RequestBody List<Integer> ids) {
         categoryService.softDeleteMultiple(ids, "unknown");
         return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(ids.size(), 1, "Đã xoá thành công"));
