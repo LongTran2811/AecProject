@@ -1,6 +1,7 @@
 package com.example.aecbackend.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,10 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Lấy tất cả sản phẩm")
     public ResponseEntity<List<ProductResponseDTO>> getAll() {
-        return ResponseEntity.ok(productService.getAll());
+        List<ProductResponseDTO> products = productService.getAll();
+        // Loại bỏ hoàn toàn trường detail khỏi response
+        products.forEach(product -> product.setDetail(null));
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("getId/{id}")
@@ -67,9 +71,8 @@ public class ProductController {
     @PutMapping("DeleteMultiple")
     public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
         String deletedBy = request.getDeletedBy() != null ? request.getDeletedBy() : "unknown";
-        List<String> stringIds = request.getIds().stream().map(String::valueOf).toList();
-        productService.softDeleteProducts(stringIds, deletedBy);
-        return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xoá thành công"));
+        productService.softDeleteProducts(request.getIds(), deletedBy);
+        return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xóa thành công"));
     }
 
 }

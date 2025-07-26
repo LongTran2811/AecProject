@@ -9,4 +9,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findAllByDeletedAtIsNull();
     List<Product> findByDeletedFalse();
     
+    // Method để lấy sản phẩm theo priorityLevel >= value và chưa bị xóa, sắp xếp theo priorityLevel tăng dần
+    List<Product> findByPriorityLevelGreaterThanEqualAndDeletedAtIsNullOrderByPriorityLevelAsc(Integer priorityLevel);
+    
+    // Method để lấy sản phẩm theo priorityLevel > value và chưa bị xóa, sắp xếp theo priorityLevel tăng dần
+    List<Product> findByPriorityLevelGreaterThanAndDeletedAtIsNullOrderByPriorityLevelAsc(Integer priorityLevel);
 } 
