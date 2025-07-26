@@ -32,14 +32,14 @@ public class ProductController {
     this.productService = productService;
    }
    private final ProductService productService;
-    @GetMapping
-    @Operation(summary = "Lấy tất cả sản phẩm")
-    public ResponseEntity<List<ProductResponseDTO>> getAll() {
-        List<ProductResponseDTO> products = productService.getAll();
-        // Loại bỏ hoàn toàn trường detail khỏi response
+    @GetMapping("/getproductbylevel")
+    @Operation(summary = "Lấy tất cả sản phẩm có level")
+    public ResponseEntity<List<ProductResponseDTO>> getProductsByLevel() {
+        List<ProductResponseDTO> products = productService.getProductsByLevel();
         products.forEach(product -> product.setDetail(null));
         return ResponseEntity.ok(products);
     }
+    
 
     @GetMapping("getId/{id}")
     @Operation(summary = "Lấy sản phẩm theo ID")
@@ -75,4 +75,11 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse<>(request.getIds().size(), 200, "Đã xóa thành công"));
     }
 
+    @GetMapping("/all")
+    @Operation(summary = "Lấy tất cả sản phẩm ")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProductsHideDetail() {
+        List<ProductResponseDTO> products = productService.getAll();
+        products.forEach(product -> product.setDetail(null));
+        return ResponseEntity.ok(products);
+    }
 }
