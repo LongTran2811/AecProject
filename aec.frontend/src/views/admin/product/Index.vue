@@ -10,12 +10,18 @@ const router = useRouter()
 const input2 = ref('')
 const productStore = useProductStore()
 const { products, isLoading } = storeToRefs(productStore)
-const { getList } = productStore
+const { getList, getById, remove, removes, resetForm } = productStore
+const selectedRows = ref([])
 //
 onMounted(() => {
   getList()
 })
-
+// Debug function để kiểm tra selection
+const handleSelectionChange = (selection) => {
+  console.log('Selection changed:', selection)
+  console.log('Selection length:', selection.length)
+  selectedRows.value = selection
+}
 const svg = `
         <path class="path" d="
           M 30 15
@@ -29,14 +35,41 @@ const svg = `
 
 // const emit = defineEmits(['show-alert'])
 
-const remove = (id) => {
+const handleDelete = (id) => {
   ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
     confirmButtonText: 'Có',
     cancelButtonText: 'Quay lại',
     type: 'warning',
   })
     .then(() => {
-      productStore.remove(id)
+      remove(id)
+    })
+    .catch(() => {})
+}
+const handleDeletes = () => {
+  if (selectedRows.value.length === 0) {
+    ElNotification({
+      title: 'Thông báo',
+      message: 'Vui lòng chọn bản ghi cần xóa',
+      type: 'warning',
+    })
+    return // Return sớm nếu không có bản ghi nào được chọn
+  }
+
+  ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
+    confirmButtonText: 'Có',
+    cancelButtonText: 'Quay lại',
+    type: 'warning',
+  })
+    .then(() => {
+      let ids = []
+      selectedRows.value.forEach((row) => {
+        ids.push(row.id)
+      })
+      console.log('Selected rows:', selectedRows.value)
+      console.log('IDs to delete:', ids)
+      removes(ids)
+      selectedRows.value = []
     })
     .catch(() => {})
 }
@@ -46,9 +79,9 @@ const formDialogRef = ref()
 const openForm = async (row) => {
   router.push('/admin/form-product')
   if (row && row.id) {
-    await productStore.getById(row.id)
+    await getById(row.id)
   } else {
-    productStore.resetForm()
+    resetForm()
   }
   formDialogRef.value?.openDialog()
 }
@@ -70,7 +103,17 @@ const openForm = async (row) => {
           />
         </div>
         <div>
-          <el-button type="danger" :icon="Delete" plain>Xóa đã chọn</el-button>
+          <span v-if="selectedRows.length > 0" class="text-sm text-gray-600 mr-2">
+            Đã chọn: {{ selectedRows.length }} bản ghi
+          </span>
+          <el-button
+            type="danger"
+            :icon="Delete"
+            v-if="selectedRows.length > 0"
+            @click="handleDeletes"
+            plain
+            >Xóa đã chọn ({{ selectedRows.length }})</el-button
+          >
           <el-button
             class="!border-teal-500 hover:!bg-teal-500 !text-teal-500 hover:!text-white"
             type="success"
@@ -90,6 +133,10 @@ const openForm = async (row) => {
             element-loading-svg-view-box="-10, -10, 50, 50"
             :data="products"
             style="min-width: 1000px"
+            :selection="selectedRows"
+            row-key="id"
+            @selection-change="handleSelectionChange"
+            :reserve-selection="false"
           >
             <el-table-column type="selection" width="55" />
             <el-table-column prop="id" label="ID" width="80" />

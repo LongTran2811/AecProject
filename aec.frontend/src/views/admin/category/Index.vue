@@ -2,16 +2,23 @@
 import { ref, onMounted } from 'vue'
 import { Search, CirclePlus, Delete, MoreFilled, Edit } from '@element-plus/icons-vue'
 import { ElNotification, ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category'
 import { storeToRefs } from 'pinia'
 import Create from './FormDialog.vue'
 
-// const router = useRouter()
 const input2 = ref('')
 const categoryStore = useCategoryStore()
 const { categories, isLoading } = storeToRefs(categoryStore)
-const { getList } = categoryStore
+const { getList, getById, remove, removes, resetForm } = categoryStore
+const selectedRows = ref([])
+
+// Debug function để kiểm tra selection
+const handleSelectionChange = (selection) => {
+  console.log('Selection changed:', selection)
+  console.log('Selection length:', selection.length)
+  selectedRows.value = selection
+}
+
 //
 onMounted(() => {
   getList()
@@ -28,29 +35,53 @@ const svg = `
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
 
-// const emit = defineEmits(['show-alert'])
-
-const remove = (id) => {
+const handleDelete = (id) => {
   ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
     confirmButtonText: 'Có',
     cancelButtonText: 'Quay lại',
     type: 'warning',
   })
     .then(() => {
-      categoryStore.remove(id);
+      remove(id)
     })
-    .catch(() => {
-    })
+    .catch(() => {})
 }
 
+const handleDeletes = () => {
+  if (selectedRows.value.length === 0) {
+    ElNotification({
+      title: 'Thông báo',
+      message: 'Vui lòng chọn bản ghi cần xóa',
+      type: 'warning',
+    })
+    return // Return sớm nếu không có bản ghi nào được chọn
+  }
+
+  ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
+    confirmButtonText: 'Có',
+    cancelButtonText: 'Quay lại',
+    type: 'warning',
+  })
+    .then(() => {
+      let ids = []
+      selectedRows.value.forEach((row) => {
+        ids.push(row.id)
+      })
+      console.log('Selected rows:', selectedRows.value)
+      console.log('IDs to delete:', ids)
+      removes(ids)
+      selectedRows.value = []
+    })
+    .catch(() => {})
+}
 
 // Handle Create
 const formDialogRef = ref()
 const openForm = async (row) => {
   if (row && row.id) {
-    await categoryStore.getById(row.id)
+    await getById(row.id)
   } else {
-    categoryStore.resetForm()
+    resetForm()
   }
   formDialogRef.value?.openDialog()
 }
@@ -72,7 +103,18 @@ const openForm = async (row) => {
           />
         </div>
         <div>
-          <el-button type="danger" :icon="Delete" plain>Xóa đã chọn</el-button>
+          <!-- Debug info -->
+          <span v-if="selectedRows.length > 0" class="text-sm text-gray-600 mr-2">
+            Đã chọn: {{ selectedRows.length }} bản ghi
+          </span>
+          <el-button
+            type="danger"
+            :icon="Delete"
+            v-if="selectedRows.length > 0"
+            @click="handleDeletes"
+            plain
+            >Xóa đã chọn ({{ selectedRows.length }})</el-button
+          >
           <el-button
             class="!border-teal-500 hover:!bg-teal-500 !text-teal-500 hover:!text-white"
             type="success"
@@ -91,13 +133,21 @@ const openForm = async (row) => {
           element-loading-svg-view-box="-10, -10, 50, 50"
           :data="categories"
           style="min-width: 100%"
+          :selection="selectedRows"
+          row-key="id"
+          @selection-change="handleSelectionChange"
+          :reserve-selection="false"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="ID" width="80" />
           <el-table-column prop="title" label="Tên danh mục" />
-          <el-table-column label="Hình ảnh">
+          <el-table-column label="  Hình ảnh">
             <template #default="scope">
-              <img :src="scope.row.image + '/thumb'" alt="Ảnh" class="w-16 h-16 object-cover rounded border" />
+              <img
+                :src="scope.row.image + '/thumb'"
+                alt="Ảnh"
+                class="w-16 h-16 object-cover rounded border"
+              />
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="Tác vụ" min-width="10">
@@ -114,7 +164,7 @@ const openForm = async (row) => {
                   <el-button
                     class="w-full !m-0 !justify-start"
                     text
-                    @click="remove(scope.row.id)"
+                    @click="handleDelete(scope.row.id)"
                     :icon="Delete"
                     >Xoá</el-button
                   >

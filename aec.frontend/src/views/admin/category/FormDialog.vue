@@ -8,6 +8,7 @@ import { useVuelidate } from '@vuelidate/core'
 
 const categoryStore = useCategoryStore()
 const { category } = storeToRefs(categoryStore)
+const { getList, create, update, resetForm } = categoryStore;
 const centerDialogVisible = ref(false)
 const title = computed(() => {
   return category.value.id ? 'Cập nhật danh mục ' + category.value.id : 'Thêm mới danh mục'
@@ -20,7 +21,7 @@ const rules = {
 const v$ = useVuelidate(rules, category)
 
 function onHide() {
-  categoryStore.resetForm()
+  resetForm()
   v$.value.$reset()
 }
 
@@ -33,12 +34,12 @@ async function onSave() {
 
   try {
     if (!category.value.id) {
-      await categoryStore.create(payload)
+      await create(payload)
     } else {
-      await categoryStore.update(payload)
+      await update(payload)
     }
     centerDialogVisible.value = false
-    categoryStore.getList()
+    getList()
     // emit event nếu cha cần
     // emit('success')
   } catch (error) {

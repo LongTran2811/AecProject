@@ -109,9 +109,9 @@ export const useProductStore = defineStore('product', () => {
   async function remove(id) {
     isLoading.value = true;
     await api.delete(`/products/delete/${id}`)
-    .then(() => {
-      product.value = initModel();
-      ElNotification({
+      .then(() => {
+        product.value = initModel();
+        ElNotification({
           title: 'Thông báo',
           message: 'Đã xoá thành công',
           type: 'success',
@@ -120,8 +120,37 @@ export const useProductStore = defineStore('product', () => {
           customClass: 'custom-success-notification',
         });
         isLoading.value = false;
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
+        isLoading.value = true;
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Lỗi: ' + err,
+          type: 'danger',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-danger-notification',
+        });
+        console.error("Error: ", err);
+      });
+  }
+  async function removes(ids) {
+    isLoading.value = true;
+    // console.log('Sending IDs for deletion:', ids); // Debug log
+    await api.put('/products/delete_multiple', ids)
+      .then(() => {
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Đã xoá thành công',
+          type: 'success',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-success-notification',
+        });
+        isLoading.value = false;
+        getList();
+      })
+      .catch((err) => {
         isLoading.value = true;
         ElNotification({
           title: 'Thông báo',
@@ -147,6 +176,7 @@ export const useProductStore = defineStore('product', () => {
     resetForm,
     create,
     update,
-    remove
+    remove,
+    removes
   }
 })

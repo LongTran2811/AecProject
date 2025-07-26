@@ -13,6 +13,7 @@ import QuillEditor from '@/components/QuillEditor.vue'
 const router = useRouter()
 const productStore = useProductStore()
 const { product } = storeToRefs(productStore)
+const { getList, create, update, resetForm } = productStore;
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const formRef = ref<FormInstance>()
@@ -37,11 +38,11 @@ const rules = {
 }
 const v$ = useVuelidate(rules, product)
 function onHide() {
-  productStore.resetForm()
+  resetForm()
   v$.value.$reset()
 }
 async function onSave() {
-    console.log('onSave called') // ← kiểm tra có in không
+  console.log('onSave called') // ← kiểm tra có in không
   // const isFormCorrect = await v$.value.$validate()
   // if (!isFormCorrect) return
   const payload = {
@@ -54,9 +55,9 @@ async function onSave() {
   try {
     const isNew = !product.value.id || String(product.value.id).trim() === ''
     if (isNew) {
-      await productStore.create(payload)
+      await create(payload)
     } else {
-      await productStore.update(payload)
+      await update(payload)
     }
     router.push('/admin/product')
   } catch (error) {
@@ -105,7 +106,7 @@ onMounted(() => {
           <el-form-item label="Đơn vị" prop="priceType">
             <el-input v-model="product.priceType" />
           </el-form-item>
-          <el-form-item label="Giá gốc" prop="priceOriginal">
+          <el-form-item label="Trạng thái" prop="status">
             <el-switch
               v-model="product.status"
               :active-value="1"
@@ -116,10 +117,14 @@ onMounted(() => {
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
             />
           </el-form-item>
-          <el-form-item label="Mức ưu tiên" prop="title">
+          <el-form-item label="Mức ưu tiên" prop="priorityLevel">
             <el-select v-model="product.priorityLevel" clearable placeholder="Chọn mức ưu tiên">
               <el-option
-                v-for="item in 20"
+                label="Không ưu tiên"
+                value="0"
+              />
+              <el-option
+                v-for="item in 10"
                 :key="item"
                 :label="'Mức ưu tiên số ' + item"
                 :value="item"
@@ -128,7 +133,7 @@ onMounted(() => {
           </el-form-item>
         </el-form>
       </el-card>
-      <el-card class="w-2/3">
+      <el-card class="w-2/3 !min-h-[300px]">
         <div class="w-full my-4">
           <QuillEditor v-model="product.detail" />
         </div>

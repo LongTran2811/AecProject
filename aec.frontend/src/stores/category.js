@@ -140,6 +140,35 @@ export const useCategoryStore = defineStore('category', () => {
         console.error("Error: ", err);
       });
   }
+  async function removes(ids) {
+    isLoading.value = true;
+    // console.log('Sending IDs for deletion:', ids); // Debug log
+    await api.put('/categories/delete_multiple', ids)
+      .then(() => {
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Đã xoá thành công',
+          type: 'success',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-success-notification',
+        });
+        isLoading.value = false;
+        getList();
+      })
+      .catch((err) => {
+        isLoading.value = true;
+        ElNotification({
+          title: 'Thông báo',
+          message: 'Lỗi: ' + err,
+          type: 'danger',
+          position: 'top-right',
+          duration: 3000,
+          customClass: 'custom-danger-notification',
+        });
+        console.error("Error: ", err);
+      });
+  }
   function resetForm() {
     category.value = initModel();
   }
@@ -155,6 +184,7 @@ export const useCategoryStore = defineStore('category', () => {
     create,
     update,
     remove,
+    removes,
     getListByTen
   }
 })
