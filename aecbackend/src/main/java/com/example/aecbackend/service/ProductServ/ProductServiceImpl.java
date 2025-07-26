@@ -46,12 +46,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO update (String id, ProductRequestDTO dto, String updatedBy) {
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        Category category = categoryRepo.findById(dto.getCategoryId())
+        // Giữ lại category cũ nếu không truyền categoryId mới
+        Category category;
+        if (dto.getCategoryId() != null) {
+            category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        
+        } else {
+            category = product.getCategoryId();
+        }
         // Lưu priorityLevel cũ để so sánh
         Integer oldPriorityLevel = product.getPriorityLevel();
-        
+        Integer newPriorityLevel = dto.getPriorityLevel() != null ? dto.getPriorityLevel() : oldPriorityLevel;
         // Cập nhật thông tin sản phẩm
         product.setTitle(dto.getTitle());
         product.setDetail(dto.getDetail());
@@ -63,16 +68,11 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(LocalDateTime.now());
         product.setUpdatedBy(updatedBy);
         product.setCategoryId(category);
-        
         // Xử lý priorityLevel nếu có thay đổi
-        if (!oldPriorityLevel.equals(dto.getPriorityLevel())) {
-            // Trước tiên, xử lý như thể sản phẩm cũ bị xóa khỏi vị trí cũ
+        if (!oldPriorityLevel.equals(newPriorityLevel)) {
             handlePriorityLevelAfterDelete(product);
-            
-            // Sau đó, xử lý như thể thêm sản phẩm mới vào vị trí mới
-            handlePriorityLevel(product, dto.getPriorityLevel());
+            handlePriorityLevel(product, newPriorityLevel);
         }
-        
         return productMapper.toDTO(productRepo.save(product));
     }
     @Override
@@ -106,15 +106,20 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDTO(product);
         }
     @Override
-    public void softDeleteProducts(List<String> ids, String deletedBy) {
+    public int softDeleteProducts(List<String> ids, String deletedBy) {
         List<Product> products = productRepo.findByIdIn(ids);
         LocalDateTime now = LocalDateTime.now();
+        int deletedCount = 0;
         for (Product product : products) {
-            product.setDeletedAt(now);
-            product.setDeletedBy(deletedBy);
-            product.setUpdatedAt(now);
+            if (product.getDeletedAt() == null) { // chỉ đếm sản phẩm chưa bị xóa
+                product.setDeletedAt(now);
+                product.setDeletedBy(deletedBy);
+                product.setUpdatedAt(now);
+                deletedCount++;
+            }
         }
         productRepo.saveAll(products);
+        return deletedCount;
     }
     @Override
     public List<ProductResponseDTO> getAll() {
@@ -150,18 +155,24 @@ public class ProductServiceImpl implements ProductService {
      * - Sản phẩm nào bị đẩy lên vượt level 10 thì chuyển về level 0 (không ưu tiên)
      */
     private void handlePriorityLevel(Product newProduct, Integer newPriorityLevel) {
-        // Lấy tất cả sản phẩm có priorityLevel >= newPriorityLevel và chưa bị xóa
-        List<Product> productsToShift = productRepo.findByPriorityLevelGreaterThanEqualAndDeletedAtIsNullOrderByPriorityLevelAsc(newPriorityLevel);
-        
-        // Dịch chuyển các sản phẩm có priorityLevel >= newPriorityLevel và < 10 lên 1 cấp
-        for (Product product : productsToShift) {
-            Integer currentLevel = product.getPriorityLevel();
-            if (currentLevel >= newPriorityLevel && currentLevel < 10) {
-                product.setPriorityLevel(currentLevel + 1);
-                product.setUpdatedAt(LocalDateTime.now());
-                productRepo.save(product);
+        if (newPriorityLevel != null && newPriorityLevel > 0) {
+            // Lấy tất cả sản phẩm có priorityLevel >= newPriorityLevel và chưa bị xóa
+            List<Product> productsToShift = productRepo.findByPriorityLevelGreaterThanEqualAndDeletedAtIsNullOrderByPriorityLevelAsc(newPriorityLevel);
+            // Dịch chuyển các sản phẩm có priorityLevel >= newPriorityLevel lên 1 cấp
+            for (Product product : productsToShift) {
+                Integer currentLevel = product.getPriorityLevel();
+                if (currentLevel >= newPriorityLevel) {
+                    int newLevel = currentLevel + 1;
+                    if (newLevel > 10) {
+                        // Nếu vượt quá 10 thì chuyển về level 0
+                        product.setPriorityLevel(0);
+                    } else {
+                        product.setPriorityLevel(newLevel);
+                    }
+                    product.setUpdatedAt(LocalDateTime.now());
+                    productRepo.save(product);
+                }
             }
-            // Nếu đã là 10 thì giữ nguyên
         }
         // Đặt priorityLevel cho sản phẩm mới
         newProduct.setPriorityLevel(newPriorityLevel);

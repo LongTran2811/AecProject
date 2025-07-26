@@ -59,7 +59,7 @@ public class CategoryController {
         return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(data, 1, "Updated successfully"));
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("remove/{id}")
     @Operation(summary = "Xóa mềm danh mục")
     public ResponseEntity<Void> delete(@PathVariable int id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";
@@ -67,7 +67,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
     @Operation(summary = "Xóa mềm nhiều danh mục")
-    @PutMapping("softDeleteMultiple")
+    @PutMapping("removes")
     public ResponseEntity<?> softDeleteMultiple(@RequestBody List<Integer> ids) {
         categoryService.softDeleteMultiple(ids, "unknown");
         return ResponseEntity.ok(new com.example.aecbackend.payload.ApiResponse<>(ids.size(), 1, "Đã xoá thành công"));

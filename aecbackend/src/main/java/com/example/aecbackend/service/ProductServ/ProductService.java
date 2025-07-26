@@ -10,6 +10,6 @@ public interface ProductService {
     void delete(String id, String deletedBy);
     List<ProductResponseDTO> getAll();
     ProductResponseDTO getById(String id);
-    void softDeleteProducts(List<String> ids, String deletedBy);
+    int softDeleteProducts(List<String> ids, String deletedBy);
     List<ProductResponseDTO> getProductsByLevel();
 } 
