@@ -1,8 +1,15 @@
 <script setup>
 import CarouselCompoment from '@/components/client/CarouselCompoment.vue';
 import ProductCompoment from '@/components/client/ProductCompoment.vue';
-import { ref } from 'vue';
-
+import { ref, onMounted } from 'vue';
+import { useProductStore } from '@/stores/product';
+import { storeToRefs } from 'pinia';
+const productStore = useProductStore();
+const {products} = storeToRefs(productStore);
+const {getListByLevel} = productStore;
+onMounted(() => {
+  getListByLevel();
+})
 const list = ref([
   {
     img: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/t/e/text_ng_n_1__2_26.png',
@@ -48,7 +55,7 @@ const list = ref([
     <CarouselCompoment />
   </div>
   <div>
-    <ProductCompoment title="Sản phẩm nổi bật" :items="list"/>
+    <ProductCompoment title="Sản phẩm nổi bật" :items="products"/>
   </div>
   </div>
 </template>

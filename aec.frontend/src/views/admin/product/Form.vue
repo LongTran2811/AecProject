@@ -13,7 +13,7 @@ import QuillEditor from '@/components/QuillEditor.vue'
 const router = useRouter()
 const productStore = useProductStore()
 const { product } = storeToRefs(productStore)
-const { getList, create, update, resetForm } = productStore;
+const { getList, create, update, resetForm } = productStore
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const formRef = ref<FormInstance>()
@@ -97,11 +97,29 @@ onMounted(() => {
           <el-form-item label="Hình ảnh" prop="image">
             <el-input v-model="product.image" />
           </el-form-item>
-          <el-form-item label="Giá gốc" prop="priceOriginal">
-            <el-input v-model="product.priceOriginal" />
+          <el-form-item label="Giá gốc (đ)" prop="priceOriginal">
+            <el-input
+              v-model="product.priceOriginal"
+              :min="0"
+              :precision="0"
+              :step="1000"
+              style="width: 100%"
+              placeholder="Nhập giá gốc"
+              :formatter="(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')"
+              :parser="(value) => value.replace(/[^\d]/g, '')"
+            />
           </el-form-item>
-          <el-form-item label="Giá bán" prop="priceOfficial">
-            <el-input v-model="product.priceOfficial" />
+          <el-form-item label="Giá bán (đ)" prop="priceOfficial">
+            <el-input
+              v-model="product.priceOfficial"
+              :min="0"
+              :precision="0"
+              :step="1000"
+              style="width: 100%"
+              placeholder="Nhập giá bán"
+              :formatter="(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')"
+              :parser="(value) => value.replace(/[^\d]/g, '')"
+            />
           </el-form-item>
           <el-form-item label="Đơn vị" prop="priceType">
             <el-input v-model="product.priceType" />
@@ -119,10 +137,7 @@ onMounted(() => {
           </el-form-item>
           <el-form-item label="Mức ưu tiên" prop="priorityLevel">
             <el-select v-model="product.priorityLevel" clearable placeholder="Chọn mức ưu tiên">
-              <el-option
-                label="Không ưu tiên"
-                value="0"
-              />
+              <el-option label="Không ưu tiên" value="0" />
               <el-option
                 v-for="item in 10"
                 :key="item"

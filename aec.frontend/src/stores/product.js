@@ -39,6 +39,18 @@ export const useProductStore = defineStore('product', () => {
         console.error("Error: ", err);
       });
   };
+  function getListByLevel() {
+    isLoading.value = true;
+    api.get('/products/level')
+      .then((response) => {
+        products.value = response.data;
+        isLoading.value = false;
+      })
+      .catch((err) => {
+        isLoading.value = true;
+        console.error("Error: ", err);
+      });
+  };
   function getById(id) {
     isLoading.value = true;
     api.get(`/products/getId/${id}`)
@@ -173,6 +185,7 @@ export const useProductStore = defineStore('product', () => {
     reLoaded,
     isLoading,
     getList,
+    getListByLevel,
     getById,
     resetForm,
     create,

@@ -24,13 +24,23 @@ const showMenu = ref(false)
     class="w-full bg-[#FBA544] px-2 md:px-5 flex flex-col md:flex-row text-white text-xs font-semibold justify-between items-center !h-auto md:!h-[50px]"
   >
     <div class="flex w-full md:w-auto justify-between items-center py-2 md:py-0">
-      <RouterLink to="/">
-        <img src="/src/assets/img/logo_aec.png" alt="" class="w-[40px] md:w-[50px]" />
-      </RouterLink>
-      <!-- Hamburger menu cho mobile -->
-      <button class="md:hidden text-white text-2xl px-2" @click="showMenu = !showMenu">
-        <i class="fa-solid" :class="showMenu ? 'fa-xmark' : 'fa-bars'"></i>
-      </button>
+      <div class="flex items-center gap-2">
+        <RouterLink to="/">
+          <img src="/src/assets/img/logo_aec.png" alt="" class="w-[40px] md:w-[50px]" />
+        </RouterLink>
+        <!-- Hamburger menu cho mobile -->
+        <button class="md:hidden text-white text-2xl px-2" @click="showMenu = !showMenu">
+          <i class="fa-solid" :class="showMenu ? 'fa-xmark' : 'fa-bars'"></i>
+        </button>
+      </div>
+      <!-- Giỏ hàng cho mobile -->
+      <div
+        class="md:hidden flex gap-4 items-center hover:bg-[#a06d32] duration-400 py-3 px-4 cursor-pointer"
+        @click="drawer = true"
+      >
+        <i class="fa-solid fa-cart-shopping" style="color: #ffffff; font-size: 17px"></i>
+        <ShoppingCartCompoment v-model:drawer="drawer" />
+      </div>
     </div>
     <!-- Menu -->
     <ul
@@ -79,9 +89,9 @@ const showMenu = ref(false)
         <span>Liên hệ</span>
       </li>
     </ul>
-    <!-- Giỏ hàng -->
+    <!-- Giỏ hàng cho desktop -->
     <div
-      class="flex gap-4 items-center hover:bg-[#a06d32] duration-400 py-3 px-4 md:py-4 md:px-4 cursor-pointer"
+      class="hidden md:flex gap-4 items-center hover:bg-[#a06d32] duration-400 py-3 px-4 md:py-4 md:px-4 cursor-pointer"
       @click="drawer = true"
     >
       <i class="fa-solid fa-cart-shopping" style="color: #ffffff; font-size: 17px"></i>

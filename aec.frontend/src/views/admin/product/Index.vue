@@ -12,6 +12,18 @@ const productStore = useProductStore()
 const { products, isLoading } = storeToRefs(productStore)
 const { getList, getById, remove, removes, resetForm } = productStore
 const selectedRows = ref([])
+
+// Hàm format giá tiền
+const formatPrice = (price) => {
+  if (!price && price !== 0) return '0 ₫'
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price)
+}
+
 //
 onMounted(() => {
   getList()
@@ -34,18 +46,6 @@ const svg = `
       `
 
 // const emit = defineEmits(['show-alert'])
-
-const handleDelete = (id) => {
-  ElMessageBox.confirm('Bạn có chắc muốn xóa bản ghi này?', 'Thông báo', {
-    confirmButtonText: 'Có',
-    cancelButtonText: 'Quay lại',
-    type: 'warning',
-  })
-    .then(() => {
-      remove(id)
-    })
-    .catch(() => {})
-}
 const handleDeletes = () => {
   if (selectedRows.value.length === 0) {
     ElNotification({
@@ -150,8 +150,16 @@ const openForm = async (row) => {
                 />
               </template>
             </el-table-column>
-            <el-table-column prop="priceOriginal" label="Giá gốc" />
-            <el-table-column prop="priceOfficial" label="Giá chính thức" />
+            <el-table-column prop="priceOriginal" label="Giá gốc">
+              <template #default="scope">
+                {{ formatPrice(scope.row.priceOriginal) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="priceOfficial" label="Giá chính thức">
+              <template #default="scope">
+                {{ formatPrice(scope.row.priceOfficial) }}
+              </template>
+            </el-table-column>
             <el-table-column prop="priceType" label="Đơn vị" />
             <el-table-column prop="status" label="Trạng thái" />
             <el-table-column prop="priorityLevel" label="Mức ưu tiên" />

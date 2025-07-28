@@ -29,7 +29,7 @@ const router = createRouter({
       children: [
         { path: '', name: 'home', component: HomeView },
         { path: 'store', name: 'store', component: StoreView },
-        { path: 'detail', name: 'detail', component: DetailView },
+        { path: 'detail/:id', name: 'detail', component: DetailView },
         { path: 'login', name: 'login', component: LoginView },
         { path: 'register', name: 'register', component: RegisterView },
         { path: 'order', name: 'order', component: OrderView },

@@ -46,7 +46,7 @@ export const useCategoryStore = defineStore('category', () => {
     isLoading.value = true;
     api.get(`/categories/getId/${id}`)
       .then((response) => {
-        category.value = response.data;
+        category.value = response.data.data;
         isLoading.value = false;
       })
       .catch((err) => {
