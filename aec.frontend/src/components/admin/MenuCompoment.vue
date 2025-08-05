@@ -1,7 +1,7 @@
 <template>
   <el-menu
     default-active="2"
-    class="el-menu-vertical-demo h-screen"
+    class="el-menu-vertical-demo h-full"
     :collapse="isCollapse"
     @open="handleOpen"
     @close="handleClose"

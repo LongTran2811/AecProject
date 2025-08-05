@@ -65,7 +65,7 @@ const formatPrice = (price) => {
           <!-- Product Image -->
           <div class="w-full h-[100px] md:h-[200px] p-1 md:p-2 overflow-hidden">
             <img
-              :src="item.img + '/main'"
+              :src="item.image + '/main'"
               :alt="item.title"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               @error="$event.target.src = '/src/assets/img/404-error.png'"
@@ -98,7 +98,7 @@ const formatPrice = (price) => {
             v-if="item.priceOriginal > item.priceOfficial"
             class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold"
           >
-            -{{
+            Giảm {{
               Math.round(((item.priceOriginal - item.priceOfficial) / item.priceOriginal) * 100)
             }}%
           </div>

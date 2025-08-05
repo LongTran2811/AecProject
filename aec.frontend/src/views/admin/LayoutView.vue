@@ -19,8 +19,8 @@ const asideWidth = computed(() => {
 </script>
 
 <template>
-  <div class="common-layout bg-gray-100 w-full h-full">
-    <el-container>
+  <div class="common-layout bg-gray-100 w-full h-screen">
+    <el-container class="h-full">
       <!-- Menu với width động -->
       <el-aside :width="asideWidth">
         <MenuCompoment ref="menuComponent" />

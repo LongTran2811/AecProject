@@ -183,11 +183,76 @@ onMounted(async () => {
   <!-- Product Description -->
   <div v-if="productDetail" class="w-full mt-8 px-2">
     <el-card>
-      <p class="text item">{{ productDetail }}</p>
+      <div class="article-content text-gray-700 px-20" style="white-space: pre-wrap" v-html="productDetail"></div>
     </el-card>
   </div>
 
   <FormInfoStoreComponent ref="formRef" />
 </template>
 
-<style scoped></style>
+<style>
+@import url(/src/assets/quill_editor.css);
+.article-content h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-content p {
+    margin-bottom: 1rem;
+    line-height: 1.75;
+    font-size: 1.125rem;
+}
+
+.article-content ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.article-content blockquote {
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #4b5563;
+    font-size: 1.125rem;
+}
+
+.article-content {
+    /* Thêm flex cho ảnh trong nội dung chi tiết */
+}
+.article-content img {
+    display: inline-block;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    max-width: 200px;
+    height: auto;
+    vertical-align: middle;
+}
+
+:deep(.p-dataview-content) {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+:deep(.p-dataview-grid) {
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+}
+
+:deep(.p-paginator) {
+    background-color: transparent;
+    border: none;
+    padding: 1rem 0;
+}
+
+:deep(.p-paginator-page.p-paginator-page-selected) {
+    background: var(--p-primary-color) !important;
+    color: #fff !important;
+}
+</style>
+
