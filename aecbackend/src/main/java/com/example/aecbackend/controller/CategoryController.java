@@ -62,7 +62,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("remove/{id}")
-    @Operation(summary = "Xóa mềm danh mục")
+    @Operation(summary = "Xóa danh mục")
     public ResponseEntity<Void> delete(@PathVariable int id,
             @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null)
@@ -71,7 +71,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Xóa mềm nhiều danh mục")
+    @Operation(summary = "Xóa nhiều danh mục")
     @PutMapping("removes")
     public ResponseEntity<?> softDeleteMultiple(@RequestBody List<Integer> ids) {
         categoryService.softDeleteMultiple(ids, "unknown");

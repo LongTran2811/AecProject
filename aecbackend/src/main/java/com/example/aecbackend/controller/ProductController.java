@@ -62,13 +62,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "Xóa mềm sản phẩm")
+    @Operation(summary = "Xóa sản phẩm")
     public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam(value = "deletedBy", required = false) String deletedBy) {
         if (deletedBy == null) deletedBy = "unknown";
         productService.delete(id, deletedBy);
         return ResponseEntity.noContent().build();
     }
-    @Operation(summary = "Xóa mềm nhiều sản phẩm")
+    @Operation(summary = "Xóa nhiều sản phẩm")
 
     @PutMapping("removes")
     public ResponseEntity<?> softDeleteProducts(@RequestBody SoftDeleteRequest request) {
