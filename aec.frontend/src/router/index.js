@@ -11,6 +11,7 @@ import ClientLayoutView from '../views/client/LayoutView.vue'
 // Admin imports
 import AdminLayoutView from '../views/admin/LayoutView.vue'
 import AdminLoginView from '../views/admin/LoginView.vue'
+import AdminMainView from '../views/admin/MainView.vue'
 import AdminDashbroadView from '../views/admin/DashbroadView.vue'
 import AdminRegisterView from '../views/admin/RegisterView.vue'
 import AdminManagerView from '../views/admin/ManagerView.vue'
@@ -45,6 +46,7 @@ const router = createRouter({
       component: AdminLayoutView,
       children: [
         { path: 'dashbroad', name: 'admin-dashbroad', component: AdminDashbroadView },
+        { path: 'main', name: 'admin-main', component: AdminMainView },
         { path: 'manager', name: 'admin-manager', component: AdminManagerView },
         { path: 'category', name: 'admin-category', component: CategoryView },
         { path: 'product', name: 'admin-product', component: ProductView },
