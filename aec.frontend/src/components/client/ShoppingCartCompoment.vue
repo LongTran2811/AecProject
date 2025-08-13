@@ -162,7 +162,7 @@ const onClick = () => {
 
     <div v-else class="flex flex-col items-center justify-center py-12">
       <el-empty
-        image="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+        image="/src/assets/img/empty-cart.png"
         description="Giỏ hàng của bạn đang trống!"
         :image-size="120"
       />

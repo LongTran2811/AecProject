@@ -8,8 +8,8 @@ const password = ref('')
   <div class="w-full min-h-screen flex items-center justify-center px-2 mt-12 md:mt-8">
     <div class="w-full max-w-xs md:max-w-lg bg-white p-4 md:p-8 rounded-lg shadow space-y-6">
       <!--Title-->
-      <div class="space-y-4 text-center font-bold items-center justify-center uppercase">
-        <h3 class="text-black text-xl">Đăng ký</h3>
+      <div class="space-y-4 text-center items-center justify-center uppercase">
+        <h3 class="text-black font-bold text-xl">Đăng ký</h3>
       </div>
       <div class="flex flex-col items-center justify-center">
         <div class="w-full h-full">
@@ -54,11 +54,11 @@ const password = ref('')
               <button
                 class="uppercase !text-xs !font-bold bg-[#FBA544] hover:bg-[#ffba6b] duration-300 text-white p-2 w-full"
               >
-                Đăng nhập
+                Đăng ký
               </button>
             </div>
             <div class="block space-y-4">
-              <h3 class="text-center font-semibold">Nếu đã có tài khoản?</h3>
+              <h6 class="text-center font-semibold">Nếu đã có tài khoản?</h6>
               <router-link to="/login">
                 <button
                   class="uppercase !text-xs !font-bold bg-[#333333] hover:bg-[#5a5a5a] duration-300 text-white p-2 w-full"
