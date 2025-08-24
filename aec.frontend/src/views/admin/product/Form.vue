@@ -8,7 +8,7 @@ import { useProductStore } from '@/stores/product'
 import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core'
 import { useRouter } from 'vue-router'
-import QuillEditor from '@/components/QuillEditor.vue'
+import QuillEditor from '@/components/FECompoment/Quill/QuillEditor.vue'
 
 const router = useRouter()
 const productStore = useProductStore()
