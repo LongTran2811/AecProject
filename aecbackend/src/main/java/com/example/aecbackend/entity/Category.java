@@ -22,22 +22,20 @@ public class Category {
 
     @Column(name = "image", nullable = false, columnDefinition = "TEXT")
     private String image;
-
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "createdBy", nullable = false, length = 20)
+    @Column(name = "created_by", nullable = false, length = 20)
     private String createdBy;
-
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "updatedBy", length = 20)
+    @Column(name = "updated_by", length = 20)
     private String updatedBy;
-
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    @Column(name = "deletedBy", length = 20)
+    @Column(name = "deleted_by", length = 20)
     private String deletedBy;
-
     // Constructors
     public Category() {}
 

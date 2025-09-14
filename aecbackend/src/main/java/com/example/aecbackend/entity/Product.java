@@ -26,25 +26,32 @@ public class Product {
     @Column(name = "image", nullable = false, columnDefinition = "TEXT")
     private String image;
 
-    @Column(name = "priceOriginal")
+    @Column(name = "price_original")
     private Integer priceOriginal;
-    @Column(name = "priceOfficial")
+    @Column(name = "price_official")
     private Integer priceOfficial;
-    @Column(name = "priceType", nullable = false, length = 20)
+    @Column(name = "price_type", nullable = false, length = 20)
     private String priceType;
     private Integer status;
+    @Column(name = "priority_level")
     private Integer priorityLevel;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "created_by")
     private String createdBy;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "updated_by")
     private String updatedBy;
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+    @Column(name = "deleted_by")
     private String deletedBy;
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category categoryId;
 
     public Product(String id, String title, String detail, String image, Integer priceOriginal, Integer priceOfficial, String priceType, Integer status, Integer priorityLevel, LocalDateTime createdAt, String createdBy, LocalDateTime updatedAt, String updatedBy, LocalDateTime deletedAt, String deletedBy, Category categoryId) {
